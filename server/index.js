@@ -61,14 +61,5 @@ mongoose.connect(process.env.MONGO_URL,{
     useUnifiedTopology:true,
 }).then(()=>{
     app.listen(PORT,()=>console.log('\n\x1b[36m%s\x1b[0m\n\x1b[31mPORT: %s\x1b[0m', 'SERVER STARTED!',PORT))
-}).catch((error)=>console.log(error))
-
-
-
-
-
-
-
-
-
+}).catch((error)=>console.error(error))
 
