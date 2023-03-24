@@ -63,8 +63,8 @@ mongoose.connect(process.env.MONGO_URL,{
 }).then(async()=>{
 
     // insert temp data only 1st time
-    if(await Post.count()==0) Post.insertMany(posts)
-    if(await User.count()==0) User.insertMany(users);
+    if(await Post.count()==0) await Post.insertMany(posts)
+    if(await User.count()==0) await User.insertMany(users);
 
     app.listen(PORT,()=>console.log('\n\x1b[36m%s\x1b[0m\n\x1b[35mPORT: %s\x1b[0m', 'SERVER STARTED!',PORT))
 
