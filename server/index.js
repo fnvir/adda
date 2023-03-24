@@ -56,10 +56,17 @@ app.use('/posts',postRoutes)
 
 //Mongoose setup
 const PORT=process.env.PORT||6009;
+
 mongoose.connect(process.env.MONGO_URL,{
     useNewUrlParser:true,
     useUnifiedTopology:true,
-}).then(()=>{
-    app.listen(PORT,()=>console.log('\n\x1b[36m%s\x1b[0m\n\x1b[31mPORT: %s\x1b[0m', 'SERVER STARTED!',PORT))
-}).catch((error)=>console.error(error))
+}).then(async()=>{
+
+    // insert temp data only 1st time
+    if(await Post.count()==0) Post.insertMany(posts)
+    if(await User.count()==0) User.insertMany(users);
+
+    app.listen(PORT,()=>console.log('\n\x1b[36m%s\x1b[0m\n\x1b[35mPORT: %s\x1b[0m', 'SERVER STARTED!',PORT))
+
+}).catch((error)=>console.error('\x1b[31m%s\x1b[0m',error))
 
