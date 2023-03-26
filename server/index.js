@@ -18,7 +18,7 @@ import User from './models/User.js'
 import Post from "./models/Post.js"
 import {users,posts} from './data/index.js'
 
-/* CONFIGS */
+// CONFIGS
 
 const __filename=fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -46,7 +46,7 @@ const storage=multer.diskStorage({
 const upload=multer({storage})
 
 // routes with files
-app.post('/auth/register',upload.single('picture'), verifyToken, register)
+app.post('/auth/register',upload.single('picture'), register )
 app.post('/posts',verifyToken, upload.single('picture'),createPost)
 
 // routes
