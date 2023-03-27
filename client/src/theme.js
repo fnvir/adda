@@ -12,7 +12,7 @@ export const colorTokens = {
         600: "#4D4D4D",
         700: "#333333",
         800: "#1A1A1A",
-        900: "#0A0A0A",
+        900: "#1D2021",
         1000: "#000000",
     },
     primary: {
@@ -75,30 +75,30 @@ export const themeSettings = (mode) => {
                 }),
         },
         typography: {
-            fontFamily: ["Rubik", "sans-serif"].join(","),
+            fontFamily: 'Rubik,sans-serif',
             fontSize: 12,
             h1: {
-                fontFamily: ["Rubik", "sans-serif"].join(","),
+                fontFamily: 'Rubik,sans-serif',
                 fontSize: 40,
             },
             h2: {
-                fontFamily: ["Rubik", "sans-serif"].join(","),
+                fontFamily: 'Rubik,sans-serif',
                 fontSize: 32,
             },
             h3: {
-                fontFamily: ["Rubik", "sans-serif"].join(","),
+                fontFamily: 'Rubik,sans-serif',
                 fontSize: 24,
             },
             h4: {
-                fontFamily: ["Rubik", "sans-serif"].join(","),
+                fontFamily: 'Rubik,sans-serif',
                 fontSize: 20,
             },
             h5: {
-                fontFamily: ["Rubik", "sans-serif"].join(","),
+                fontFamily: 'Rubik,sans-serif',
                 fontSize: 16,
             },
             h6: {
-                fontFamily: ["Rubik", "sans-serif"].join(","),
+                fontFamily: 'Rubik,sans-serif',
                 fontSize: 14,
             },
         },
