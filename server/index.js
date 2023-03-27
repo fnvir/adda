@@ -40,7 +40,10 @@ const storage=multer.diskStorage({
         cb(null,'public/assets');
     },
     filename:(req,file,cb)=>{
-        cb(null,file.originalname)
+        let z=Math.random().toString(36).substring(2)+Date.now()+Math.random().toString(36).substring(2),x;
+        if((x=file.originalname.lastIndexOf('.'))>0)
+            z+=file.originalname.substring(x)
+        cb(null,z)
     }
 });
 const upload=multer({
