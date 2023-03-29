@@ -6,26 +6,27 @@ import { checkStrength } from '../middleware/auth.js'
 // Register user
 export const register= async(req,res)=>{
     try{
-        const{
+        const {
             firstName,
             lastName,
             email,
             password,
-            picturePath,
             friends,
             location,
             occupation
         } = req.body;
+        if(await User.findOne({email:email}))
+            return res.status(400).json({msg:'Email already in use !',err:'email'})
         let z=checkStrength(password);
         if(!z.strong) return res.status(400).json({msg:z.msg,err:'password'})
         const salt=await bcrypt.genSalt();
         const passwordHash= await bcrypt.hash(password,salt);
         const newUser=new User({
-            firstName,
-            lastName,
+            firstName:firstName.charAt(0).toUpperCase()+firstName.substring(1),
+            lastName:lastName.charAt(0).toUpperCase()+lastName.substring(1),
             email,
             password:passwordHash,
-            picturePath,
+            picturePath:req.file.filename,
             friends,
             location,
             occupation,
@@ -35,7 +36,7 @@ export const register= async(req,res)=>{
         const savedUser=await newUser.save();
         res.status(201).json(savedUser)
     } catch(err){
-        console.error(err)
+        // console.error(err)
         return res.status(500).json({error:err.message})
     }
 }
