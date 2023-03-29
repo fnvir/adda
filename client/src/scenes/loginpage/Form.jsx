@@ -54,17 +54,15 @@ const Form = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const isLogin = pageType === "login";
     const isRegister = pageType === "register";
-    let host=`http://localhost:3001`;
+    const host=process.env.REACT_APP_HOSTURL;
 
     const register = async (values, onSubmitProps) => {
         // send form info with image
         const formData = new FormData();
         for (let value in values) formData.append(value, values[value]);
-        formData.append("picturePath", values.picture.name);
+        // formData.append("picturePath", values.picture.name);
 
-        const res = await fetch(
-            `${host}/auth/register`,
-            {
+        const res = await fetch(`${host}/auth/register`, {
                 method: "POST",
                 body: formData,
             }
