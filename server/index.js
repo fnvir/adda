@@ -3,7 +3,6 @@ import bodyParser from "body-parser"
 import mongoose from "mongoose"
 import cors from "cors"
 import dotenv from "dotenv"
-import multer from "multer"
 import helmet from "helmet"
 import morgan from "morgan"
 import path from "path"
@@ -11,9 +10,6 @@ import { fileURLToPath } from "url"
 import authRoutes from "./routes/auth.js"
 import userRoutes from "./routes/users.js"
 import postRoutes from "./routes/posts.js"
-import {register} from './controllers/auth.js'
-import {createPost} from './controllers/posts.js'
-import { verifyToken,checkStrength } from "./middleware/auth.js"
 import User from './models/User.js'
 import Post from "./models/Post.js"
 import {users,posts} from './data/index.js'
@@ -33,30 +29,6 @@ app.use(bodyParser.urlencoded({limit:"15mb",extended:true}))
 app.use(cors())
 app.use("/assets",express.static(path.join(__dirname,'public/assets')))
 
-
-// file storage
-const storage=multer.diskStorage({
-    destination:(req,file,cb)=>{
-        cb(null,'public/assets');
-    },
-    filename:(req,file,cb)=>{
-        let z=Math.random().toString(36).substring(2)+Date.now()+Math.random().toString(36).substring(2),x;
-        if((x=file.originalname.lastIndexOf('.'))>0)
-            z+=file.originalname.substring(x)
-        cb(null,z)
-    }
-});
-const upload=multer({
-    storage,
-    fileFilter:(req,file,cb)=>{
-        if(req.body.password && !checkStrength(req.body.password).strong) cb(null,false);
-        else cb(null,true)
-    }
-})
-
-// routes with files
-app.post('/auth/register',upload.single('picture'),register)
-app.post('/posts',verifyToken, upload.single('picture'),createPost)
 
 // routes
 app.use('/auth',authRoutes)
