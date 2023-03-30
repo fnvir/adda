@@ -2,7 +2,8 @@ import { Box, useMediaQuery } from "@mui/material";
 import Navbar from "scenes/navbar";
 import { useTitle } from "components/setTitle";
 import { useSelector } from "react-redux";
-import UserWidget from "scenes/widgets/UserWIdget";
+import UserWidget from "scenes/widgets/UserWidget";
+import PostWidget from "scenes/widgets/PostWidget"
 
 const HomePage=()=>{
     useTitle('adda – Home')
@@ -25,7 +26,7 @@ const HomePage=()=>{
                     flexBasis={isNonMobileScreens?'42%':undefined}
                     mt={isNonMobileScreens?undefined:'2rem'}
                 >
-
+                    <PostWidget picturePath={picturePath} />
                 </Box>
                 {isNonMobileScreens && (
                     <Box flexBasis='26%'>
