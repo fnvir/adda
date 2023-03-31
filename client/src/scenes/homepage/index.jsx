@@ -3,7 +3,8 @@ import Navbar from "scenes/navbar";
 import { useTitle } from "components/setTitle";
 import { useSelector } from "react-redux";
 import UserWidget from "scenes/widgets/UserWidget";
-import PostWidget from "scenes/widgets/PostWidget"
+import CreatePost from "scenes/widgets/CreatePost"
+import Posts from "scenes/widgets/ShowPosts";
 
 const HomePage=()=>{
     useTitle('adda – Home')
@@ -26,7 +27,8 @@ const HomePage=()=>{
                     flexBasis={isNonMobileScreens?'42%':undefined}
                     mt={isNonMobileScreens?undefined:'2rem'}
                 >
-                    <PostWidget picturePath={picturePath} />
+                    <CreatePost picturePath={picturePath} />
+                    <Posts userId={_id} />
                 </Box>
                 {isNonMobileScreens && (
                     <Box flexBasis='26%'>

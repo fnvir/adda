@@ -1,13 +1,13 @@
 import { Box, Typography, useTheme,IconButton, useMediaQuery } from "@mui/material";
 import { useDispatch} from 'react-redux'
 import Form from "./Form";
-import { setMode} from "state";
+import { changeMode} from "state";
 import {DarkMode,LightMode} from "@mui/icons-material";
 import FlexBetween from "components/FlexBetween";
 import { useTitle } from "components/setTitle";
 
 
-const LoginPage = () => {
+const LoginPage = ({pgtype=1}) => {
     useTitle('adda – sign up | log in')
     const theme = useTheme();
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -24,7 +24,7 @@ const LoginPage = () => {
                 <Typography fontWeight="bold" fontSize="32px" color="primary">
                     adda
                 </Typography>
-                <IconButton onClick={() => dispatch(setMode())}>
+                <IconButton onClick={() => dispatch(changeMode())}>
                         {theme.palette.mode === "dark" ? (
                             <DarkMode sx={{ fontSize: "25px" }} />
                         ) : (
@@ -44,7 +44,7 @@ const LoginPage = () => {
                 <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
                     Unlimited adddaaaa... !
                 </Typography>
-                <Form />
+                <Form pgtype={pgtype}/>
             </Box>
         </Box>
     )

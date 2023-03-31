@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { CssBaseline,ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { themeSettings } from './theme';
+import Logout from 'components/Logout';
 
 
 
@@ -20,9 +21,11 @@ function App() {
                 <ThemeProvider theme={theme}>
                     <CssBaseline/>
                     <Routes>
-                        <Route path='/' element={!isLoggedIn ? <Loginpage/> : <Navigate to='/home' />} />
+                        <Route path='/login?' element={!isLoggedIn ? <Loginpage/> : <Navigate to='/home' />} />
                         <Route path='/home' element={isLoggedIn ? <Homepage/> : <Navigate to='/' />} />
                         <Route path='/profile/:userId' element={isLoggedIn?<Profilepage/>:<Navigate to='/'/>}/>
+                        <Route path='/register' element={<Loginpage pgtype={2} />} />
+                        <Route path='/logout' element={<Logout/>} />
                     </Routes>
                 </ThemeProvider>
             </BrowserRouter>

@@ -1,5 +1,5 @@
 // color design tokens export
-export const colorTokens = {
+const colorTokens = {
     grey: {
         0: "#FFFFFF",
         10: "#F6F6F6",
@@ -73,6 +73,10 @@ export const themeSettings = (mode) => {
                         alt: colorTokens.grey[0],
                     },
                 }),
+            action: {
+                disabledBackground: colorTokens.primary[100],
+                disabled: colorTokens.grey[200]
+            }
         },
         typography: {
             fontFamily: 'Rubik,sans-serif',
@@ -101,6 +105,6 @@ export const themeSettings = (mode) => {
                 fontFamily: 'Rubik,sans-serif',
                 fontSize: 14,
             },
-        },
+        }
     };
 };

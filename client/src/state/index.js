@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState={
-    mode:"light",
+    mode:"dark",
     user:null,
     token:null,
     posts:[],
@@ -11,7 +11,7 @@ export const authSlice= createSlice({
     name:"auth",
     initialState,
     reducers:{
-        setMode:(state)=>{
+        changeMode:(state)=>{
             state.mode=state.mode==="light"?"dark":"light"
         },
         setLogin:(state,action)=>{
@@ -30,15 +30,20 @@ export const authSlice= createSlice({
         setPosts:(state,action)=>{
             state.posts=action.payload.posts
         },
-        setPost:(state,action)=>{
-            const updatedPosts=state.posts.map(post=>{
-                if(post._id===action.payload.post_id) return action.payload.post;
-                return post;
-            })
-            state.posts=updatedPosts;
-        }
+        setLikes:(state,action)=>{
+            const uId=action.payload.userId
+            for(let p of state.posts)
+                if(p._id===action.payload.postId){
+                    p.likes[uId]?(delete p.likes[uId]):p.likes[uId]=true
+                    break;
+                }
+        },
+        clearPosts:state=>{
+            state.posts=[]
+        },
+        reset:()=>initialState
     }
 });
 
-export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost } = authSlice.actions;
+export const { changeMode, setLogin, setLogout, setFriends, setPosts, setLikes, clearPosts, reset } = authSlice.actions;
 export default authSlice.reducer;

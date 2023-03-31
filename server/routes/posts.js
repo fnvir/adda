@@ -7,7 +7,7 @@ import { upload } from '../middleware/filemanager.js'
 const router = express.Router();
 
 // READ 
-router.get("/", verifyToken, getFeedPosts);
+router.get("/", verifyToken, getFeedPosts)
 router.get("/:userId/posts", verifyToken, getUserPosts);
 // Post
 router.post('/', verifyToken, upload.single('picture'), createPost)

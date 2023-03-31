@@ -20,7 +20,7 @@ const UserWidget = ({ userId, picturePath }) => {
     const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
-
+    
     const getUser = async () => {
         const response = await fetch(`${process.env.REACT_APP_HOSTURL}/users/${userId}`,{
             method: "GET",
@@ -29,7 +29,8 @@ const UserWidget = ({ userId, picturePath }) => {
         const data = await response.json();
         setUser(data);
     };
-
+    const friends=useSelector(state=>state.user.friends)
+    
     useEffect(() => {
         getUser();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -45,8 +46,8 @@ const UserWidget = ({ userId, picturePath }) => {
         occupation,
         viewedProfile,
         impressions,
-        friends,
     } = user;
+    
     return (
         <WidgetWrapper>
             {/* 1st row */}

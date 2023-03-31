@@ -26,7 +26,7 @@ export const register= async(req,res)=>{
             lastName:lastName.charAt(0).toUpperCase()+lastName.substring(1),
             email,
             password:passwordHash,
-            picturePath:req.file.filename,
+            picturePath:req.file?.filename || 'default.png',
             friends,
             location,
             occupation,
@@ -36,7 +36,7 @@ export const register= async(req,res)=>{
         const savedUser=await newUser.save();
         res.status(201).json(savedUser)
     } catch(err){
-        // console.error(err)
+        console.error(err)
         return res.status(500).json({error:err.message})
     }
 }
@@ -59,6 +59,7 @@ export const login =async(req,res)=>{
         delete user.password;
         res.status(200).json({token,user})
     } catch(err){
+        console.error(err)
         res.status(500).json({error:err.message})
     }
 }

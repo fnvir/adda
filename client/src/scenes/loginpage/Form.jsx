@@ -23,7 +23,7 @@ const regSchema = yup.object().shape({
     password: yup.string().required("required"),
     location: yup.string().required("required"),
     occupation: yup.string().required("required"),
-    picture: yup.string().required("required"),
+    picture: yup.string(),
 });
 
 const loginSchema = yup.object().shape({
@@ -46,8 +46,8 @@ const initialValuesLogin = {
     password: "",
 };
 
-const Form = () => {
-    const [pageType, setPageType] = useState("login");
+const Form = ({pgtype}) => {
+    const [pageType, setPageType] = useState(pgtype==1?'login':'register');
     const { palette } = useTheme();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -201,7 +201,7 @@ const Form = () => {
                                             >
                                                 <input {...getInputProps()} />
                                                 {!values.picture ? (
-                                                    <p>Add Picture Here</p>
+                                                    <p>Add Profile Picture</p>
                                                 ) : (
                                                     <FlexBetween>
                                                         <Typography>{values.picture.name}</Typography>

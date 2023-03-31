@@ -21,7 +21,7 @@ import {
     Close,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { setMode, setLogout } from "state";
+import { changeMode, setLogout } from "state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "components/FlexBetween";
 
@@ -77,7 +77,7 @@ const Navbar = () => {
             {/* DESKTOP NAV */}
             {isNonMobileScreens ? (
                 <FlexBetween gap="2rem">
-                    <IconButton onClick={() => dispatch(setMode())}>
+                    <IconButton onClick={() => dispatch(changeMode())}>
                         {theme.palette.mode === "dark" ? (
                             <DarkMode sx={{ fontSize: "25px" }} />
                         ) : (
@@ -150,7 +150,7 @@ const Navbar = () => {
                         gap="3rem"
                     >
                         <IconButton
-                            onClick={() => dispatch(setMode())}
+                            onClick={() => dispatch(changeMode())}
                             sx={{ fontSize: "25px" }}
                         >
                             {theme.palette.mode === "dark" ? (
