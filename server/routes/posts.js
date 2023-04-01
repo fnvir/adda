@@ -1,5 +1,5 @@
 import express from "express";
-import { getFeedPosts, getUserPosts, likePost, createPost} from "../controllers/posts.js";
+import { getFeedPosts, getUserPosts, likePost, createPost, commentPost} from "../controllers/posts.js";
 import { verifyToken } from "../middleware/auth.js";
 import { upload } from '../middleware/filemanager.js'
 
@@ -13,5 +13,6 @@ router.get("/:userId/posts", verifyToken, getUserPosts);
 router.post('/', verifyToken, upload.single('picture'), createPost)
 /* UPDATE */
 router.patch("/:id/like", verifyToken, likePost);
+router.patch("/:id/comment", verifyToken, commentPost);
 
 export default router;

@@ -38,12 +38,19 @@ export const authSlice= createSlice({
                     break;
                 }
         },
+        updateComments:(state,action)=>{
+            for(let p of state.posts)
+                if(p._id===action.payload.postId){
+                    p.comments.push(action.payload.newComment)
+                    break;
+                }
+        },
         clearPosts:state=>{
             state.posts=[]
         },
-        reset:()=>initialState
+        reset:()=>initialState,
     }
 });
 
-export const { changeMode, setLogin, setLogout, setFriends, setPosts, setLikes, clearPosts, reset } = authSlice.actions;
+export const { changeMode, setLogin, setLogout, setFriends, setPosts, setLikes, clearPosts, updateComments, reset } = authSlice.actions;
 export default authSlice.reducer;

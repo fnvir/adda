@@ -64,14 +64,23 @@ export const likePost = async (req, res) => {
         }
 
         await post.save()
-
-        // const updatedPost = await Post.findByIdAndUpdate(
-        //     id,
-        //     { likes: post.likes },
-        //     { new: true }
-        // );
-
+        
         res.status(200).json({message:'success'});
+    } catch (err) {
+        console.error(err)
+        res.status(404).json({ message: err.message });
+    }
+};
+
+export const commentPost = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {userId,comment,date } = req.body;
+        if(!date) date=Date.now()
+        const post = await Post.findById(id);
+        post.comments.push({userId,comment,date});
+        await post.save()
+        res.status(200).json({userId,comment,date});
     } catch (err) {
         console.error(err)
         res.status(404).json({ message: err.message });
