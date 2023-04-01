@@ -54,7 +54,7 @@ const Posts = ({ userId, isProfile = false }) => {
             {posts.map(
                 ({
                     _id,
-                    userId,
+                    p_userId,
                     firstName,
                     lastName,
                     description,
@@ -67,7 +67,8 @@ const Posts = ({ userId, isProfile = false }) => {
                     <PostWidget
                         key={_id}
                         postId={_id}
-                        postUserId={userId}
+                        postUserId={p_userId}
+                        userId={userId}
                         name={`${firstName} ${lastName}`}
                         description={description}
                         datetime={new Intl.DateTimeFormat('en-US',{dateStyle:'full',timeStyle:"short",hour12:true}).format(new Date(createdAt))}

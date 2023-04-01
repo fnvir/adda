@@ -8,7 +8,8 @@ import {
     MenuItem,
     FormControl,
     useTheme,
-    useMediaQuery
+    useMediaQuery,
+    Tooltip
 } from '@mui/material'
 import {
     Search,
@@ -77,13 +78,15 @@ const Navbar = () => {
             {/* DESKTOP NAV */}
             {isNonMobileScreens ? (
                 <FlexBetween gap="2rem">
-                    <IconButton onClick={() => dispatch(changeMode())}>
-                        {theme.palette.mode === "dark" ? (
-                            <DarkMode sx={{ fontSize: "25px" }} />
-                        ) : (
-                            <LightMode sx={{ color: dark, fontSize: "25px" }} />
-                        )}
-                    </IconButton>
+                    <Tooltip title="Change theme">
+                        <IconButton onClick={() => dispatch(changeMode())}>
+                            {theme.palette.mode === "dark" ? (
+                                <DarkMode sx={{ fontSize: "25px" }} />
+                            ) : (
+                                <LightMode sx={{ color: dark, fontSize: "25px" }} />
+                            )}
+                        </IconButton>
+                    </Tooltip>
                     <Message sx={{ fontSize: "25px" }} />
                     <Notifications sx={{ fontSize: "25px" }} />
                     <Help sx={{ fontSize: "25px" }} />

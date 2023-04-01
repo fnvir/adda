@@ -1,12 +1,12 @@
-import { Box } from "@mui/material";
+import { Avatar, Box } from "@mui/material";
 
-const UserImage=({image,size='60px'})=>(
+const UserImage=({image,size='60px',alt='Picture'})=>(
     <Box width={size} height={size}>
-        <img
+        <Avatar
             style={{objectFit:'cover',borderRadius:'50%'}}
             width={size}
             height={size}
-            alt='user img'
+            alt={alt}
             src={`${process.env.REACT_APP_HOSTURL}/assets/${image}`}
         />
     </Box>

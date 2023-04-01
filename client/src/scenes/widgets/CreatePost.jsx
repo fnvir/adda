@@ -33,7 +33,7 @@ const CreatePost = ({ picturePath }) => {
     const [image, setImage] = useState(null);
     const [post, setPost] = useState("");
     const { palette } = useTheme();
-    const { _id } = useSelector((state) => state.user);
+    const { _id,firstName } = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const mediumMain = palette.neutral.mediumMain;
@@ -54,21 +54,24 @@ const CreatePost = ({ picturePath }) => {
         dispatch(setPosts({ posts }));
         setImage(null);
         setPost("");
+        setIsImage(null)
     };
-
     return (
         <WidgetWrapper>
             <FlexBetween gap="1.5rem">
-                <UserImage image={picturePath} />
+                <UserImage image={picturePath} alt={firstName}/>
                 <InputBase
-                    placeholder="What's on your mind..."
+                    placeholder="Share something with the world..."
                     onChange={(e) => setPost(e.target.value)}
                     value={post}
+                    multiline={true}
+                    minRows={1}
+                    maxRows={10}
                     sx={{
                         width: "100%",
                         backgroundColor: palette.neutral.light,
                         borderRadius: "2rem",
-                        padding: "1rem 2rem",
+                        padding: "1.5rem 2rem",
                     }}
                 />
             </FlexBetween>

@@ -4,7 +4,8 @@ import {
     FavoriteOutlined,
     ShareOutlined,
 } from "@mui/icons-material";
-import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
+import { IconButton, Typography, useTheme } from "@mui/material";
+import CommentSection from "components/Comments";
 import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -15,6 +16,7 @@ import { setLikes } from "state";
 const PostWidget = ({
     postId,
     postUserId,
+    userId, // id of viewer
     name,
     description,
     datetime,
@@ -24,9 +26,10 @@ const PostWidget = ({
     comments,
 }) => {
     const [isComments, setIsComments] = useState(false);
+    const [showFullText, setFullText] = useState(false);
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token);
-    const userId = useSelector((state) => state.user._id);
+    // const userId = useSelector((state) => state.user._id);
     const isLiked = Boolean(likes[userId]);
     const likeCount = Object.keys(likes).length;
 
@@ -51,7 +54,10 @@ const PostWidget = ({
             console.error(err)
         });
     };
-
+    // if(isComments){
+    //     console.log(commentCount,comments)
+    //     console.log(JSON.parse(JSON.stringify(userId)))
+    // }
     return (
         <WidgetWrapper m="2rem 0">
             <Friend
@@ -60,9 +66,19 @@ const PostWidget = ({
                 subtitle={datetime}
                 userPicturePath={userPicturePath}
             />
-            <Typography color={main} sx={{ mt: "1rem" }}>
-                {description}
+            <Typography color={main} sx={{ mt: "1rem" }} paragraph={true}>
+                {!showFullText && description.length>202?(description.substring(0,198)+'...'):description}
             </Typography>
+            {description.length>202 && (
+                <Typography sx={{
+                    "&:hover": {
+                        color: palette.primary.main,
+                        cursor: "pointer",
+                    }
+                }} onClick={() => setFullText(!showFullText)}>
+                    {'Show ' + (showFullText ? 'less' : 'more')}
+                </Typography>
+            )}
             {picturePath && (
                 <img
                     width="100%"
@@ -97,19 +113,8 @@ const PostWidget = ({
                     <ShareOutlined />
                 </IconButton>
             </FlexBetween>
-            {isComments && (
-                <Box mt="0.5rem">
-                    {comments.map((comment, i) => (
-                        <Box key={`${name}-${i}`}>
-                            <Divider />
-                            <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                                {comment}
-                            </Typography>
-                        </Box>
-                    ))}
-                    <Divider />
-                </Box>
-            )}
+            
+            {isComments && <CommentSection comments={comments} postId={postId} userId={userId}/>}
         </WidgetWrapper>
     );
 };

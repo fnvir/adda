@@ -1,5 +1,5 @@
 import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setFriends } from "state";
@@ -31,37 +31,35 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
                     "Content-Type": "application/json",
                 },
             }
-        ).then(async(res)=>{
+        ).then(async (res) => {
             const data = await res.json();
-            if(!res.ok) throw new Error(Object.values(data)[0])
+            if (!res.ok) throw new Error(Object.values(data)[0])
             dispatch(setFriends({ friends: data }));
             console.log(friends)
             console.log(data)
-        }).catch(err=>{
+        }).catch(err => {
             console.error(err)
-            console.log(friendId,_id)
         });
     };
 
     return (
         <FlexBetween>
             <FlexBetween gap="1rem">
-                <UserImage image={userPicturePath} size="55px" />
-                <Box
-                    onClick={() => {
-                        navigate(`/profile/${friendId}`);
-                        navigate(0);
-                    }}
-                >
+                <UserImage image={userPicturePath} size="40px" alt={name} />
+                <Box>
                     <Typography
                         color={main}
                         variant="h5"
                         fontWeight="500"
                         sx={{
                             "&:hover": {
-                                color: palette.primary.light,
+                                color: palette.neutral.light,
                                 cursor: "pointer",
                             },
+                        }}
+                        onClick={() => {
+                            navigate(`/profile/${friendId}`);
+                            navigate(0);
                         }}
                     >
                         {name}
@@ -71,17 +69,19 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
                     </Typography>
                 </Box>
             </FlexBetween>
-            <IconButton
-                onClick={updateFriend}
-                sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
-            >
-                {isFriend ?
-                    <PersonRemoveOutlined sx={{ color: primaryDark }} />
-                    :
-                    // null
-                    <PersonAddOutlined sx={{ color: primaryDark }} />
-                }
-            </IconButton>
+            {_id !== friendId && (
+                <Tooltip title={(isFriend ? 'Remove' : 'Add') + ' Friend'}>
+                    <IconButton
+                        onClick={updateFriend}
+                        sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
+                    >
+                        {isFriend ?
+                            <PersonRemoveOutlined sx={{ color: 'red' }} />
+                            :
+                            <PersonAddOutlined sx={{ color: primaryDark }} />
+                        }
+                    </IconButton>
+                </Tooltip>)}
         </FlexBetween>
     );
 };

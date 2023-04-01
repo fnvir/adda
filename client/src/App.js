@@ -26,6 +26,7 @@ function App() {
                         <Route path='/profile/:userId' element={isLoggedIn?<Profilepage/>:<Navigate to='/'/>}/>
                         <Route path='/register' element={<Loginpage pgtype={2} />} />
                         <Route path='/logout' element={<Logout/>} />
+                        <Route exact path='*' element={<Navigate to='/'/>} replace />
                     </Routes>
                 </ThemeProvider>
             </BrowserRouter>
