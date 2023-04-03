@@ -46,7 +46,7 @@ export const login =async(req,res)=>{
     try{
         // throw new Error('500 test')
         const {email,password}=req.body;
-        const user=await User.findOne({email:email})
+        const user=await User.findOne({email:email}).select('+password')
         if(!user)
             return res.status(400).json({msg:'User not found !',err:'email'})
         let z=checkStrength(user.password+'');
@@ -56,7 +56,7 @@ export const login =async(req,res)=>{
         if(!isMatch)
             return res.status(400).json({msg:'Invalid Password !',err:'password'})  
         const token=jwt.sign({id:user._id},process.env.JWT_SECRET)
-        delete user.password;
+        delete user._doc.password
         res.status(200).json({token,user})
     } catch(err){
         console.error(err)

@@ -1,4 +1,4 @@
-import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
+import { EditOutlined, PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 import { Box, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -35,8 +35,6 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
             const data = await res.json();
             if (!res.ok) throw new Error(Object.values(data)[0])
             dispatch(setFriends({ friends: data }));
-            console.log(friends)
-            console.log(data)
         }).catch(err => {
             console.error(err)
         });
@@ -48,7 +46,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
                 <UserImage image={userPicturePath} size="40px" alt={name} />
                 <Box>
                     <Typography
-                        color={main}
+                        color={palette.neutral.dark}
                         variant="h5"
                         fontWeight="500"
                         sx={{
@@ -69,7 +67,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
                     </Typography>
                 </Box>
             </FlexBetween>
-            {_id !== friendId && (
+            {_id !== friendId ? (
                 <Tooltip title={(isFriend ? 'Remove' : 'Add') + ' Friend'}>
                     <IconButton
                         onClick={updateFriend}
@@ -81,7 +79,14 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
                             <PersonAddOutlined sx={{ color: primaryDark }} />
                         }
                     </IconButton>
-                </Tooltip>)}
+                </Tooltip>
+            ) : (
+                <Tooltip title='Edit post'>
+                    <IconButton>
+                        <EditOutlined sx={{color:primaryDark}}/>
+                    </IconButton>
+                </Tooltip>
+            )}
         </FlexBetween>
     );
 };

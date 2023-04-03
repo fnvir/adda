@@ -4,7 +4,7 @@ import {
     LocationOnOutlined,
     WorkOutlineOutlined,
 } from "@mui/icons-material";
-import { Box, Typography, Divider, useTheme } from "@mui/material";
+import { Box, Typography, Divider, useTheme, CircularProgress } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -14,30 +14,43 @@ import { useNavigate } from "react-router-dom";
 
 const UserWidget = ({ userId, picturePath }) => {
     const [user, setUser] = useState(null);
+    const [loaded, setLoaded] = useState(false);
     const { palette } = useTheme();
     const navigate = useNavigate();
     const token = useSelector((state) => state.token);
     const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
-    
+
     const getUser = async () => {
-        const response = await fetch(`${process.env.REACT_APP_HOSTURL}/users/${userId}`,{
+        await fetch(`${process.env.REACT_APP_HOSTURL}/users/${userId}`, {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await response.json();
-        setUser(data);
+        }).then(async (res) => {
+            setLoaded(true);
+            const data = await res.json();
+            if (!res.ok) return;
+            setUser(data);
+        }).catch(err => {
+            console.errror(err)
+        })
     };
-    const friends=useSelector(state=>state.user.friends)
-    
+    const friends = useSelector(state => state.user.friends)
+
     useEffect(() => {
         getUser();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    if (!user) {
+    if(!loaded)
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center">
+                <CircularProgress />
+            </Box>
+        )
+
+    if (!user)
         return null;
-    }
+
 
     const {
         firstName,
@@ -47,7 +60,7 @@ const UserWidget = ({ userId, picturePath }) => {
         viewedProfile,
         impressions,
     } = user;
-    
+
     return (
         <WidgetWrapper>
             {/* 1st row */}

@@ -25,27 +25,25 @@ const CommentSection = ({ userId, postId, comments }) => {
             const newComment = await res.json();
             if(!res.ok)
                 throw new Error(Object.values(newComment)[0])
-            console.log(typeof newComment)
-            console.log(newComment)
             dispatch(updateComments({ postId, newComment}));
             setComment('')
-            console.log(comments)
         }).catch(err=>{
             console.error(err)
         });
     }
+
     let ret=[];
+    const data=null
     for(let i=comments.length-1;i>-1;i--) {
         ret.push((
             <Box key={`${postId}-${i}`} style={{ padding: "1em"}}>
                 <Grid container wrap='nowrap' spacing={2}>
                     <Grid item>
-                        <Avatar alt='name' src={'default.png'} />
+                        <Avatar alt='name' src={`${process.env.REACT_APP_HOSTURL}/assets/${data?.picturePath||'default.png'}`} />
                     </Grid>
                     <Grid item xs zeroMinWidth sx={{ padding: '0 auto' }}>
                         <Typography align='left' color={palette.neutral.mediumMain} variant='h6'>
-                            {'John Cena'}
-                            {/* {comments[i].userId} */}
+                            {data?.fullname||'John Cena'}
                         </Typography>
                         <Typography align='justify' variant='subtitle'>
                             {comments[i].comment}
@@ -54,14 +52,12 @@ const CommentSection = ({ userId, postId, comments }) => {
                         <Typography align='right' variant='caption' color={palette.neutral.medium} >{new Date(comments[i].date).toUTCString()}</Typography>
                     
                 </Grid>
-                <Divider sx={{ marginTop: '1rem' }}/>
+                <Divider sx={{ marginTop: '.5rem'}}/>
             </Box>
         ))
     }
     return (
-
         <Box mt="0.5rem">
-
             <InputBase
                 placeholder="Comment on this post..."
                 multiline={true}
@@ -82,9 +78,8 @@ const CommentSection = ({ userId, postId, comments }) => {
                 }
                 onChange={(e) => setComment(e.target.value)}
             />
-            <Divider sx={{ marginTop: '1rem' }} />
+            <Divider sx={{ marginTop: '1rem',marginBottom:'.5rem'  }} />
             {ret}
-
         </Box>
     )
 }

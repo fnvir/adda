@@ -14,6 +14,10 @@ const postSchema = mongoose.Schema(
             type: String,
             required: true,
         },
+        isShared: {
+            type:Boolean,
+            default:false,
+        },
         location: String,
         description: String,
         picturePath: String,
@@ -26,6 +30,10 @@ const postSchema = mongoose.Schema(
             type: Array,
             default: [],
         },
+        views:{
+            type:Number,
+            default:0,
+        }
     },
     { timestamps: true }
 );

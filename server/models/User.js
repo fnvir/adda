@@ -19,13 +19,14 @@ const UserSchema=new mongoose.Schema(
             type:String,
             required:true,
             max:80,
-            unique:true, 
+            unique:true,
         },
         password:{
             type:String,
             required:true,
             min:7,
             max:20,
+            select:false
         },
         picturePath:{
             type:String,

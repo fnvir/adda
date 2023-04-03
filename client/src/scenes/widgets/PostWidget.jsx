@@ -1,10 +1,14 @@
 import {
+    AnalyticsOutlined,
+    AutoGraphOutlined,
+    BarChartOutlined,
+    CachedOutlined,
     ChatBubbleOutlineOutlined,
     FavoriteBorderOutlined,
     FavoriteOutlined,
     ShareOutlined,
 } from "@mui/icons-material";
-import { IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Grid, IconButton, Link, Tooltip, Typography, useTheme } from "@mui/material";
 import CommentSection from "components/Comments";
 import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
@@ -24,6 +28,7 @@ const PostWidget = ({
     userPicturePath,
     likes,
     comments,
+    views,
 }) => {
     const [isComments, setIsComments] = useState(false);
     const [showFullText, setFullText] = useState(false);
@@ -45,12 +50,12 @@ const PostWidget = ({
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ userId }),
-        }).then(async(res)=>{
+        }).then(async (res) => {
             const updatedPost = await res.json();
-            if(!res.ok)
+            if (!res.ok)
                 throw new Error(Object.values(updatedPost)[0])
-            dispatch(setLikes({ postId, userId}));
-        }).catch(err=>{
+            dispatch(setLikes({ postId, userId }));
+        }).catch(err => {
             console.error(err)
         });
     };
@@ -58,18 +63,31 @@ const PostWidget = ({
     //     console.log(commentCount,comments)
     //     console.log(JSON.parse(JSON.stringify(userId)))
     // }
+    console.log(description)
     return (
         <WidgetWrapper m="2rem 0">
+
+            {name == 'ai bot' && (
+            <Box m='-.6rem 0 .5em .4rem' display='flex' alignItems='inherit' gap='1rem' sx={{ color: palette.neutral.mediumMain }}>
+                <FlexBetween gap='1rem'>
+                    <CachedOutlined />
+                    <Typography align='left' variant="subtitle1" >
+                        <Link href={`/profile/${postUserId}`} underline='hover'>{name}</Link>
+                        {' shared this post'}
+                    </Typography>
+                </FlexBetween>
+            </Box>)}
+
             <Friend
                 friendId={postUserId}
                 name={name}
                 subtitle={datetime}
                 userPicturePath={userPicturePath}
             />
-            <Typography color={main} sx={{ mt: "1rem" }} paragraph={true}>
-                {!showFullText && description.length>202?(description.substring(0,198)+'...'):description}
+            <Typography color={main} sx={{ mt: "1rem",whiteSpace: 'pre-line' }} paragraph={true} >
+                {!showFullText && description.length > 202 ? (description.substring(0, 198) + '...') : description}
             </Typography>
-            {description.length>202 && (
+            {description.length > 202 && (
                 <Typography sx={{
                     "&:hover": {
                         color: palette.primary.main,
@@ -101,20 +119,29 @@ const PostWidget = ({
                         <Typography>{likeCount}</Typography>
                     </FlexBetween>
 
-                    <FlexBetween gap="0.3rem">
-                        <IconButton onClick={() => setIsComments(!isComments)}>
-                            <ChatBubbleOutlineOutlined />
-                        </IconButton>
-                        <Typography>{comments.length}</Typography>
+                    <FlexBetween gap="0.3rem" onClick={() => setIsComments(!isComments)}>
+                        <Tooltip title='Comment'>
+                            <IconButton>
+                                <ChatBubbleOutlineOutlined />
+                            </IconButton>
+                        </Tooltip>
+                        <Typography sx={{ cursor: 'pointer' }}>{comments.length}</Typography>
                     </FlexBetween>
                 </FlexBetween>
-
-                <IconButton>
-                    <ShareOutlined />
-                </IconButton>
+                <FlexBetween gap='1rem'>
+                    <Tooltip title='Impressions'>
+                        <FlexBetween gap="0.3rem">
+                            <AutoGraphOutlined />
+                            <Typography>{likeCount + comments.length + views}</Typography>
+                        </FlexBetween>
+                    </Tooltip>
+                    <IconButton>
+                        <ShareOutlined />
+                    </IconButton>
+                </FlexBetween>
             </FlexBetween>
-            
-            {isComments && <CommentSection comments={comments} postId={postId} userId={userId}/>}
+
+            {isComments && <CommentSection comments={comments} postId={postId} userId={userId} />}
         </WidgetWrapper>
     );
 };

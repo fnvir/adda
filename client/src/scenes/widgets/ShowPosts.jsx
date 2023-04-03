@@ -8,6 +8,7 @@ const Posts = ({ userId, isProfile = false }) => {
     const posts = useSelector((state) => state.posts);
     const token = useSelector((state) => state.token);
     const host = process.env.REACT_APP_HOSTURL
+    const uId=userId
 
     const getAllPosts = async () => {
         await fetch(`${host}/posts`, {
@@ -48,13 +49,13 @@ const Posts = ({ userId, isProfile = false }) => {
          else 
             getAllPosts();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    console.log(posts[0])
     return (
         <>
-            
             {posts.map(
                 ({
                     _id,
-                    p_userId,
+                    userId,
                     firstName,
                     lastName,
                     description,
@@ -63,12 +64,13 @@ const Posts = ({ userId, isProfile = false }) => {
                     userPicturePath,
                     likes,
                     comments,
+                    views,
                 }) => (
                     <PostWidget
                         key={_id}
                         postId={_id}
-                        postUserId={p_userId}
-                        userId={userId}
+                        postUserId={userId}
+                        userId={uId}
                         name={`${firstName} ${lastName}`}
                         description={description}
                         datetime={new Intl.DateTimeFormat('en-US',{dateStyle:'full',timeStyle:"short",hour12:true}).format(new Date(createdAt))}
@@ -76,6 +78,7 @@ const Posts = ({ userId, isProfile = false }) => {
                         userPicturePath={userPicturePath}
                         likes={likes}
                         comments={comments}
+                        views={views}
                     />
                 )
             )}
