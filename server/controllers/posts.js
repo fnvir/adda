@@ -1,5 +1,6 @@
-import Post from "../models/Post.js";
 import User from "../models/User.js";
+import Post from "../models/Post.js";
+import Comment from "../models/Comment.js";
 
 //create
 export const createPost = async (req, res) => {
@@ -15,7 +16,6 @@ export const createPost = async (req, res) => {
             userPicturePath: user.picturePath,
             picturePath: req.file?.filename || '',
             likes: {},
-            comments: [],
         });
         await newPost.save();
 
@@ -74,15 +74,30 @@ export const likePost = async (req, res) => {
 
 export const commentPost = async (req, res) => {
     try {
-        const { id } = req.params;
-        const {userId,comment,date } = req.body;
-        if(!date) date=Date.now()
-        const post = await Post.findById(id);
-        post.comments.push({userId,comment,date});
-        await post.save()
-        res.status(200).json({userId,comment,date});
+        const { id:postId } = req.params;
+        const {userId,comment} = req.body;
+        const newComment=new Comment({
+            postId,
+            user:userId,
+            comment
+        })
+        await newComment.save();
+        await Post.updateOne({_id:postId},{$inc:{commentsCount:1}})
+        await newComment.populate('user','firstName lastName picturePath')
+        res.status(200).json(newComment);
     } catch (err) {
         console.error(err)
         res.status(404).json({ message: err.message });
     }
 };
+
+export const getComments = async (req, res) => {
+    try {
+        const { id:postId } = req.params;
+        const comments= await Comment.find({postId}).populate('user','firstName lastName picturePath')
+        res.status(200).json(comments)
+    } catch (err) {
+        console.error(err)
+        res.status(404).json({ message: err.message });
+    }
+}

@@ -1,14 +1,12 @@
 import {
-    AnalyticsOutlined,
     AutoGraphOutlined,
-    BarChartOutlined,
     CachedOutlined,
     ChatBubbleOutlineOutlined,
     FavoriteBorderOutlined,
     FavoriteOutlined,
     ShareOutlined,
 } from "@mui/icons-material";
-import { Box, Grid, IconButton, Link, Tooltip, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Link, Tooltip, Typography, useTheme } from "@mui/material";
 import CommentSection from "components/Comments";
 import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
@@ -27,7 +25,7 @@ const PostWidget = ({
     picturePath,
     userPicturePath,
     likes,
-    comments,
+    commentsCount,
     views,
 }) => {
     const [isComments, setIsComments] = useState(false);
@@ -63,7 +61,7 @@ const PostWidget = ({
     //     console.log(commentCount,comments)
     //     console.log(JSON.parse(JSON.stringify(userId)))
     // }
-    console.log(description)
+
     return (
         <WidgetWrapper m="2rem 0">
 
@@ -125,14 +123,14 @@ const PostWidget = ({
                                 <ChatBubbleOutlineOutlined />
                             </IconButton>
                         </Tooltip>
-                        <Typography sx={{ cursor: 'pointer' }}>{comments.length}</Typography>
+                        <Typography sx={{ cursor: 'pointer' }}>{commentsCount}</Typography>
                     </FlexBetween>
                 </FlexBetween>
                 <FlexBetween gap='1rem'>
                     <Tooltip title='Impressions'>
                         <FlexBetween gap="0.3rem">
                             <AutoGraphOutlined />
-                            <Typography>{likeCount + comments.length + views}</Typography>
+                            <Typography>{likeCount + commentsCount + views}</Typography>
                         </FlexBetween>
                     </Tooltip>
                     <IconButton>
@@ -141,7 +139,7 @@ const PostWidget = ({
                 </FlexBetween>
             </FlexBetween>
 
-            {isComments && <CommentSection comments={comments} postId={postId} userId={userId} />}
+            {isComments && <CommentSection postId={postId} userId={userId} />}
         </WidgetWrapper>
     );
 };

@@ -41,7 +41,7 @@ export const authSlice= createSlice({
         updateComments:(state,action)=>{
             for(let p of state.posts)
                 if(p._id===action.payload.postId){
-                    p.comments.push(action.payload.newComment)
+                    ++p.commentsCount
                     break;
                 }
         },

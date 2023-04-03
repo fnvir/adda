@@ -33,19 +33,6 @@ export const getUserFriends = async (req, res) => {
     }
 };
 
-// get basic info of user
-export const getInfo=async(req,res)=>{
-    try {
-        const { id } = req.params;
-        const user = await User.findById(id).select(['-friends','-impressions','-occupation','-location']) // no need useless stuff
-        const {firstName,lastName,...rest}=user._doc
-        rest['fullname']=firstName+' '+lastName
-        res.status(200).json(rest);
-    } catch (err) {
-        console.error(err)
-        res.status(404).json({ message: err.message });
-    }
-}
 
 // UPDATE
 export const addRemoveFriend = async (req, res) => {

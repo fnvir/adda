@@ -16,9 +16,6 @@ const Posts = ({ userId, isProfile = false }) => {
             headers: { Authorization: `Bearer ${token}` },
         }).then(async(res)=>{
             const data = await res.json();
-            console.log(
-                new Intl.DateTimeFormat('en-GB',{dateStyle:'full',timeStyle:"short",hour12:true}).format( new Date(data[0].createdAt))
-            )
             if(!res.ok)
                 throw new Error(Object.values(data)[0])
             dispatch(setPosts({ posts: data }));
@@ -63,7 +60,7 @@ const Posts = ({ userId, isProfile = false }) => {
                     picturePath,
                     userPicturePath,
                     likes,
-                    comments,
+                    commentsCount,
                     views,
                 }) => (
                     <PostWidget
@@ -77,7 +74,7 @@ const Posts = ({ userId, isProfile = false }) => {
                         picturePath={picturePath}
                         userPicturePath={userPicturePath}
                         likes={likes}
-                        comments={comments}
+                        commentsCount={commentsCount}
                         views={views}
                     />
                 )

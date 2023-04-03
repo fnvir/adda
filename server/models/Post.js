@@ -15,8 +15,8 @@ const postSchema = mongoose.Schema(
             required: true,
         },
         isShared: {
-            type:Boolean,
-            default:false,
+            type: Boolean,
+            default: false,
         },
         location: String,
         description: String,
@@ -26,13 +26,13 @@ const postSchema = mongoose.Schema(
             type: Map,
             of: Boolean,
         },
-        comments: {
-            type: Array,
-            default: [],
+        commentsCount: {
+            type: Number,
+            default: 0,
         },
-        views:{
-            type:Number,
-            default:0,
+        views: {
+            type: Number,
+            default: 0,
         }
     },
     { timestamps: true }

@@ -1,55 +1,65 @@
 import { SendOutlined } from "@mui/icons-material";
-import { Avatar, Box, Divider, Grid, IconButton, InputBase, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, CircularProgress, Divider, Grid, IconButton, InputBase, Typography, useTheme } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateComments } from "state";
 
 
 
-const CommentSection = ({ userId, postId, comments }) => {
+const CommentSection = ({ userId, postId}) => {
     const { palette } = useTheme();
-    const [comment,setComment] = useState('');
+    const [comments,setComments]=useState([]);
+    const [newcomment,setNewComment] = useState('');
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token);
 
+    if(!comments.length)
+        fetch(`${process.env.REACT_APP_HOSTURL}/posts/${postId}/comments`, {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+        }).then(res=>res.json())
+        .then(setComments)
+        .catch(err => console.errror(err))
+
     const handleClick=async()=>{
-        
         await fetch(`${process.env.REACT_APP_HOSTURL}/posts/${postId}/comment`, {
             method: "PATCH",
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ userId,comment,date:Date.now() }),
+            body: JSON.stringify({ userId,comment: newcomment}),
         }).then(async(res)=>{
-            const newComment = await res.json();
+            const data = await res.json();
             if(!res.ok)
-                throw new Error(Object.values(newComment)[0])
-            dispatch(updateComments({ postId, newComment}));
-            setComment('')
+                throw new Error(Object.values(data)[0])
+            setNewComment('')
+            dispatch(updateComments({ postId, newComment:data}));
+            comments.push(data)
+            console.log(data)
         }).catch(err=>{
             console.error(err)
         });
     }
 
     let ret=[];
-    const data=null
     for(let i=comments.length-1;i>-1;i--) {
+        let c=comments[i];
         ret.push((
-            <Box key={`${postId}-${i}`} style={{ padding: "1em"}}>
+            <Box key={`${c._id}`} style={{ padding: "1em"}}>
                 <Grid container wrap='nowrap' spacing={2}>
                     <Grid item>
-                        <Avatar alt='name' src={`${process.env.REACT_APP_HOSTURL}/assets/${data?.picturePath||'default.png'}`} />
+                        <Avatar alt='name' src={`${process.env.REACT_APP_HOSTURL}/assets/${c.user.picturePath||'default.png'}`} />
                     </Grid>
                     <Grid item xs zeroMinWidth sx={{ padding: '0 auto' }}>
                         <Typography align='left' color={palette.neutral.mediumMain} variant='h6'>
-                            {data?.fullname||'John Cena'}
+                            {`${c.user.firstName} ${c.user.lastName}`}
                         </Typography>
                         <Typography align='justify' variant='subtitle'>
-                            {comments[i].comment}
+                            {c.comment}
                         </Typography>
                     </Grid>
-                        <Typography align='right' variant='caption' color={palette.neutral.medium} >{new Date(comments[i].date).toUTCString()}</Typography>
+                        <Typography align='right' variant='caption' color={palette.neutral.medium} >{new Date(c.createdAt).toUTCString()}</Typography>
                     
                 </Grid>
                 <Divider sx={{ marginTop: '.5rem'}}/>
@@ -63,7 +73,7 @@ const CommentSection = ({ userId, postId, comments }) => {
                 multiline={true}
                 minRows={1}
                 maxRows={5}
-                value={comment}
+                value={newcomment}
                 sx={{
                     width: "100%",
                     backgroundColor: palette.primary.light,
@@ -76,10 +86,16 @@ const CommentSection = ({ userId, postId, comments }) => {
                         <SendOutlined />
                     </IconButton>
                 }
-                onChange={(e) => setComment(e.target.value)}
+                onChange={(e) => setNewComment(e.target.value)}
             />
             <Divider sx={{ marginTop: '1rem',marginBottom:'.5rem'  }} />
-            {ret}
+            {comments.length ?
+                ret
+                :
+                (<Box display="flex" justifyContent="center" alignItems="center">
+                    <CircularProgress disableShrink={true} />
+                </Box>)
+            }
         </Box>
     )
 }

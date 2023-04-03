@@ -44,7 +44,7 @@ const UserWidget = ({ userId, picturePath }) => {
     if(!loaded)
         return (
             <Box display="flex" justifyContent="center" alignItems="center">
-                <CircularProgress />
+                <CircularProgress disableShrink={true} />
             </Box>
         )
 
