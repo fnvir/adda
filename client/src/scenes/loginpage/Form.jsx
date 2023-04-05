@@ -84,7 +84,6 @@ const Form = ({pgtype}) => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(values),
         });
-        console.log(res)
         const resp = await res.json();
         if (res.ok) {
             onSubmitProps.resetForm();

@@ -2,11 +2,10 @@ import {
     EditOutlined,
     DeleteOutlined,
     AttachFileOutlined,
-    GifBoxOutlined,
     ImageOutlined,
     MicOutlined,
-    MoreHorizOutlined,
     CloseOutlined,
+    VideoCameraBackOutlined
 } from "@mui/icons-material";
 import {
     Box,
@@ -33,7 +32,7 @@ const CreatePost = ({ picturePath }) => {
     const [image, setImage] = useState(null);
     const [post, setPost] = useState("");
     const { palette } = useTheme();
-    const { _id,firstName } = useSelector((state) => state.user);
+    const { _id, firstName } = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const mediumMain = palette.neutral.mediumMain;
@@ -59,7 +58,7 @@ const CreatePost = ({ picturePath }) => {
     return (
         <WidgetWrapper>
             <FlexBetween gap="1.5rem">
-                <UserImage image={picturePath} alt={firstName}/>
+                <UserImage image={picturePath} alt={firstName} />
                 <InputBase
                     placeholder="Share something with the world..."
                     onChange={(e) => setPost(e.target.value)}
@@ -81,16 +80,16 @@ const CreatePost = ({ picturePath }) => {
                     border={`1px solid ${medium}`}
                     borderRadius="5px"
                     mt="1rem"
-                    p="1rem"
+                    p="2rem"
                 >
-                    <Grid container justifyContent="flex-end">
-                        <IconButton onClick={() => setIsImage(!isImage)}>
+                    <Grid container justifyContent="flex-end" mt='-2rem'>
+                        <IconButton onClick={() => setIsImage(!isImage)} edge='end'>
                             <CloseOutlined />
                         </IconButton>
                     </Grid>
 
                     <Dropzone
-                        acceptedFiles=".jpg,.jpeg,.png"
+                        acceptedFiles=".jpg,.jpeg,.png,.gif"
                         multiple={false}
                         onDrop={(acceptedFiles) => setImage(acceptedFiles[0])}
                     >
@@ -136,34 +135,26 @@ const CreatePost = ({ picturePath }) => {
                     <ImageOutlined sx={{ color: mediumMain }} />
                     <Typography
                         color={mediumMain}
-                        sx={{ "&:hover": { cursor: "pointer", color: medium } }}
+                        sx={{ "&:hover": { cursor: "pointer", color: medium}, display: !isNonMobileScreens ? 'none' : 'inline'  }}
                     >
                         Image
                     </Typography>
                 </FlexBetween>
 
-                {isNonMobileScreens ? (
-                    <>
-                        <FlexBetween gap="0.25rem">
-                            <GifBoxOutlined sx={{ color: mediumMain }} />
-                            <Typography color={mediumMain}>Clip</Typography>
-                        </FlexBetween>
+                <FlexBetween gap="0.25rem">
+                    <VideoCameraBackOutlined sx={{ color: mediumMain }} />
+                    <Typography sx={{ display: !isNonMobileScreens ? 'none' : 'inline' }} color={mediumMain}>Clip</Typography>
+                </FlexBetween>
 
-                        <FlexBetween gap="0.25rem">
-                            <AttachFileOutlined sx={{ color: mediumMain }} />
-                            <Typography color={mediumMain}>Attachment</Typography>
-                        </FlexBetween>
+                <FlexBetween gap="0.25rem">
+                    <MicOutlined sx={{ color: mediumMain }} />
+                    <Typography sx={{ display: !isNonMobileScreens ? 'none' : 'inline' }} color={mediumMain}>Audio</Typography>
+                </FlexBetween>
 
-                        <FlexBetween gap="0.25rem">
-                            <MicOutlined sx={{ color: mediumMain }} />
-                            <Typography color={mediumMain}>Audio</Typography>
-                        </FlexBetween>
-                    </>
-                ) : (
-                    <FlexBetween gap="0.25rem">
-                        <MoreHorizOutlined sx={{ color: mediumMain }} />
-                    </FlexBetween>
-                )}
+                <FlexBetween gap="0.25rem">
+                    <AttachFileOutlined sx={{ color: mediumMain }} />
+                    <Typography sx={{ display: !isNonMobileScreens ? 'none' : 'inline' }} color={mediumMain}>Attachment</Typography>
+                </FlexBetween>
 
                 <Button
                     disabled={!(post || image)}

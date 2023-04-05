@@ -3,23 +3,16 @@ import { Box, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setFriends } from "state";
-import FlexBetween from "./FlexBetween";
-import UserImage from "./UserImage";
+import FlexBetween from "../../components/FlexBetween";
+import UserImage from "../../components/UserImage";
 
-const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
+const PostInfo = ({ friendId, name, subtitle, userPicturePath }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { _id } = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
-    const friends = useSelector((state) => state.user.friends);
-
     const { palette } = useTheme();
-    const primaryLight = palette.primary.light;
-    const primaryDark = palette.primary.dark;
-    const main = palette.neutral.main;
-    const medium = palette.neutral.medium;
-
-    const isFriend = friends.includes(friendId);
+    const isFriend = useSelector((state) => state.user.friends).includes(friendId);
 
     const updateFriend = async () => {
         await fetch(
@@ -62,7 +55,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
                     >
                         {name}
                     </Typography>
-                    <Typography color={medium} fontSize="0.75rem">
+                    <Typography color={palette.neutral.medium} fontSize="0.75rem">
                         {subtitle}
                     </Typography>
                 </Box>
@@ -71,19 +64,19 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
                 <Tooltip title={(isFriend ? 'Remove' : 'Add') + ' Friend'}>
                     <IconButton
                         onClick={updateFriend}
-                        sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
+                        sx={{ backgroundColor: palette.primary.light, p: "0.6rem" }}
                     >
                         {isFriend ?
                             <PersonRemoveOutlined sx={{ color: 'red' }} />
                             :
-                            <PersonAddOutlined sx={{ color: primaryDark }} />
+                            <PersonAddOutlined sx={{ color: palette.primary.dark }} />
                         }
                     </IconButton>
                 </Tooltip>
             ) : (
                 <Tooltip title='Edit post'>
                     <IconButton>
-                        <EditOutlined sx={{color:primaryDark}}/>
+                        <EditOutlined sx={{color:palette.primary.dark}}/>
                     </IconButton>
                 </Tooltip>
             )}
@@ -91,4 +84,4 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
     );
 };
 
-export default Friend;
+export default PostInfo;

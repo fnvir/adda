@@ -6,21 +6,30 @@ import Comment from "../models/Comment.js";
 export const createPost = async (req, res) => {
     try {
         const { userId, description } = req.body;
-        const user = await User.findById(userId);
         const newPost = new Post({
-            userId,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            location: user.location,
+            user:userId,
             description,
-            userPicturePath: user.picturePath,
             picturePath: req.file?.filename || '',
-            likes: {},
         });
         await newPost.save();
+        getFeedPosts(res,res)
+    } catch (err) {
+        console.error(err)
+        res.status(409).json({ message: err.message });
+    }
+};
 
-        const post = (await Post.find()).reverse();
-        res.status(201).json(post);
+export const sharePost = async (req, res) => {
+    try {
+        const { userId, description, postId } = req.body;
+        const newPost = new Post({
+            user:userId,
+            description,
+            likes: {},
+            share:{isShared:true,ogPost:postId}
+        });
+        await newPost.save();
+        getFeedPosts(req,res)
     } catch (err) {
         console.error(err)
         res.status(409).json({ message: err.message });
@@ -30,7 +39,10 @@ export const createPost = async (req, res) => {
 // READ
 export const getFeedPosts = async (req, res) => {
     try {
-        const post = (await Post.find()).reverse();
+        const post = await Post.find().populate([
+            {path:'user',select:'firstName lastName picturePath'},
+            {path:'share',populate: {path:'ogPost',select:'user description picturePath createdAt',populate:{path:'user',select:'firstName lastName picturePath'}}}
+            ]).sort({createdAt:'desc'})
         res.status(200).json(post);
     } catch (err) {
         console.error(err)
@@ -50,6 +62,11 @@ export const getUserPosts = async (req, res) => {
 };
 
 // update
+export const editPost = async (req, res) => {
+
+}
+
+
 export const likePost = async (req, res) => {
     try {
         const { id } = req.params;

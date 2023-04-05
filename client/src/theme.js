@@ -107,6 +107,25 @@ export const themeSettings = (mode) => {
                 fontFamily: 'Rubik,sans-serif',
                 fontSize: 14,
             },
-        }
+        },
+        components: {
+            MuiCssBaseline: {
+                styleOverrides: {
+                    '::-webkit-scrollbar': {
+                        width: '8px'
+                    },
+                    '::-webkit-scrollbar-track': {
+                        background: 'none'
+                    },
+                    '::-webkit-scrollbar-thumb': {
+                        background: colorTokens.primary[mode==='light'?600:500],
+                        borderRadius: '10px'
+                    },
+                    '::-webkit-scrollbar-thumb:hover': {
+                        background: '#555'
+                    }
+                },
+            },
+        },
     };
 };

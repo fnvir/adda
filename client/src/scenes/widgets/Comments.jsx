@@ -8,17 +8,19 @@ import { updateComments } from "state";
 
 const CommentSection = ({ userId, postId}) => {
     const { palette } = useTheme();
+    const [loading,setLoading]=useState(true);
     const [comments,setComments]=useState([]);
     const [newcomment,setNewComment] = useState('');
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token);
 
-    if(!comments.length)
+    if(loading)
         fetch(`${process.env.REACT_APP_HOSTURL}/posts/${postId}/comments`, {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
         }).then(res=>res.json())
         .then(setComments)
+        .then(()=>setLoading(false))
         .catch(err => console.errror(err))
 
     const handleClick=async()=>{
@@ -36,7 +38,6 @@ const CommentSection = ({ userId, postId}) => {
             setNewComment('')
             dispatch(updateComments({ postId, newComment:data}));
             comments.push(data)
-            console.log(data)
         }).catch(err=>{
             console.error(err)
         });
@@ -47,7 +48,10 @@ const CommentSection = ({ userId, postId}) => {
         let c=comments[i];
         ret.push((
             <Box key={`${c._id}`} style={{ padding: "1em"}}>
-                <Grid container wrap='nowrap' spacing={2}>
+                <Typography align='right' mt='-1rem' sx={{display:'block'}} variant='caption' color={palette.neutral.medium} >
+                    {new Date(c.createdAt).toUTCString()}
+                </Typography>
+                <Grid container wrap='nowrap' spacing={2} marginTop='-1rem'>
                     <Grid item>
                         <Avatar alt='name' src={`${process.env.REACT_APP_HOSTURL}/assets/${c.user.picturePath||'default.png'}`} />
                     </Grid>
@@ -59,8 +63,8 @@ const CommentSection = ({ userId, postId}) => {
                             {c.comment}
                         </Typography>
                     </Grid>
-                        <Typography align='right' variant='caption' color={palette.neutral.medium} >{new Date(c.createdAt).toUTCString()}</Typography>
                     
+
                 </Grid>
                 <Divider sx={{ marginTop: '.5rem'}}/>
             </Box>
@@ -89,11 +93,11 @@ const CommentSection = ({ userId, postId}) => {
                 onChange={(e) => setNewComment(e.target.value)}
             />
             <Divider sx={{ marginTop: '1rem',marginBottom:'.5rem'  }} />
-            {comments.length ?
+            {!loading ?
                 ret
                 :
                 (<Box display="flex" justifyContent="center" alignItems="center">
-                    <CircularProgress disableShrink={true} />
+                    <CircularProgress disableShrink />
                 </Box>)
             }
         </Box>

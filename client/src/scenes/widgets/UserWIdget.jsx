@@ -4,7 +4,7 @@ import {
     LocationOnOutlined,
     WorkOutlineOutlined,
 } from "@mui/icons-material";
-import { Box, Typography, Divider, useTheme, CircularProgress } from "@mui/material";
+import { Box, Typography, Divider, useTheme, Skeleton, Stack } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -43,9 +43,12 @@ const UserWidget = ({ userId, picturePath }) => {
 
     if(!loaded)
         return (
-            <Box display="flex" justifyContent="center" alignItems="center">
-                <CircularProgress disableShrink={true} />
-            </Box>
+            <Stack spacing={1}>
+                <Skeleton variant="circular" width={60} height={60} animation='wave'/>
+                <Skeleton variant="rounded" width='100%' height='6rem' animation="wave"/>
+                <Skeleton variant="rounded" width='100%' height='5rem' />
+                <Skeleton variant="rounded" width='100%' height='9rem' animation="wave"/>
+            </Stack>
         )
 
     if (!user)
