@@ -29,6 +29,7 @@ export const sharePost = async (req, res) => {
             share:{isShared:true,ogPost:postId}
         });
         await newPost.save();
+        await Post.updateOne({_id:postId},{$inc:{shareCount:1}})
         getFeedPosts(req,res)
     } catch (err) {
         console.error(err)
@@ -53,7 +54,10 @@ export const getFeedPosts = async (req, res) => {
 export const getUserPosts = async (req, res) => {
     try {
         const { userId } = req.params;
-        const post = await Post.find({ userId });
+        const post = await Post.find({ user:userId }).populate([
+            {path:'user',select:'firstName lastName picturePath'},
+            {path:'share',populate: {path:'ogPost',select:'user description picturePath createdAt',populate:{path:'user',select:'firstName lastName picturePath'}}}
+            ]).sort({createdAt:'desc'})
         res.status(200).json(post);
     } catch (err) {
         console.error(err)

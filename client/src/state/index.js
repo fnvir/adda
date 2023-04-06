@@ -23,8 +23,10 @@ export const authSlice= createSlice({
             state.token=null;
         },
         setFriends:(state,action)=>{
-            if(state.user)
+            if(state.user){
                 state.user.friends=action.payload.friends;
+                state.user.friendCount=action.payload.friends.length
+            }
             else console.error('User friends do not exit')
         },
         setPosts:(state,action)=>{

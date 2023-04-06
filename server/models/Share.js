@@ -1,13 +1,21 @@
 import mongoose from "mongoose";
 
-export const shareSchema=new mongoose.Schema({
-    ogPost:{
+const shareSchema=new mongoose.Schema({
+    post:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'Post',
-        default:null
+        required:true
     },
-    isShared: {
-        type: Boolean,
-        default: false,
-    },
+    shares: [{
+        sharedBy:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'User',
+            required:true
+        },
+        sharedPost:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Post',
+            required:true
+        }
+    }],
 })

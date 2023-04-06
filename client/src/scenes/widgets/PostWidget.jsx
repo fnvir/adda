@@ -1,7 +1,7 @@
 import {
-    AutoGraphOutlined,
     CachedOutlined,
     ChatBubbleOutlineOutlined,
+    EditOutlined,
     FavoriteBorderOutlined,
     FavoriteOutlined,
     ShareOutlined,
@@ -9,33 +9,32 @@ import {
 import { Box, IconButton, Link, SvgIcon, Tooltip, Typography, useTheme } from "@mui/material";
 import CommentSection from "scenes/widgets/Comments";
 import FlexBetween from "components/FlexBetween";
-import PostInfo from "scenes/widgets/PostInfo";
+import UserInfo from "scenes/widgets/UserInfo";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setLikes,setPosts } from "state";
+import { setLikes, setPosts } from "state";
 
-const PostWidget = ({post}) => {
-    console.log(post)
-    const isShared = post.share?.isShared||false;
+const PostWidget = ({ post,isProfile=false }) => {
+    const isShared = post.share?.isShared || false;
     const {
         user: {
             _id: postUserId,
             firstName,
             lastName,
-            picturePath:userPicturePath
+            picturePath: userPicturePath
         },
         description,
         createdAt,
         picturePath,
     } = isShared ? post.share.ogPost : post;
-    const {_id: postId,likes,commentsCount,sharecount,views} = post;
+    const { _id: postId, likes, commentsCount, shareCount, views } = post;
     const [isComments, setIsComments] = useState(false);
     const [showFullText, setFullText] = useState(false);
     const dispatch = useDispatch();
     const token = useSelector(state => state.token);
-    const {_id:userId,firstName:vfname,lastName:vlname} = useSelector(state => state.user)
-    const {firstName:sfname,lastName:slname} = post.user;
+    const { _id: userId, firstName: vfname, lastName: vlname } = useSelector(state => state.user)
+    const { firstName: sfname, lastName: slname } = post.user;
     const isLiked = Boolean(likes[userId]);
     const likeCount = Object.keys(likes).length;
 
@@ -61,48 +60,57 @@ const PostWidget = ({post}) => {
         });
     };
 
-    const handleShare = async()=>{
+    const handleShare = async () => {
         const formData = new FormData();
+        formData.append("postId", !isShared ? postId : post.share.ogPost._id); // if nested share, share root post
         formData.append("userId", userId);
-        formData.append("description", 'to be implemented');
-        formData.append("postId", postId);
+        formData.append("description", 'to be implemented'); //TODO implement ui & backend
+
         await fetch(`${process.env.REACT_APP_HOSTURL}/posts/${postId}/share`, {
             method: "POST",
-            headers: {Authorization: `Bearer ${token}`},
+            headers: { Authorization: `Bearer ${token}` },
             body: formData,
         }).then(async (res) => {
             const posts = await res.json();
             if (!res.ok)
                 throw new Error(Object.values(posts)[0])
             dispatch(setPosts({ posts }));
-        }).catch(err => {
-            console.error(err)
-        });
+        }).catch(err => console.error(err));
     }
 
     return (
-        <WidgetWrapper m="2rem 0">
+        <WidgetWrapper m="1.5rem 0 0 0">
 
             {isShared && (
-            <Box m='-.6rem 0 .5em .4rem' display='flex' alignItems='inherit' gap='1rem' sx={{ color: palette.neutral.mediumMain }}>
-                <FlexBetween gap='1rem'>
-                    <CachedOutlined />
-                    <Typography align='left' variant="subtitle1" >
-                        {vfname+vlname!==sfname+slname?
-                            <Link href={`/profile/${postUserId}`} underline='hover'>{`${sfname} ${slname}`}</Link>
-                            : 'You'
-                        } shared this post
-                    </Typography>
-                </FlexBetween>
-            </Box>)}
-
-            <PostInfo
-                friendId={postUserId}
-                name={`${firstName} ${lastName}`}
-                subtitle={new Intl.DateTimeFormat('en-US',{dateStyle:'full',timeStyle:"short",hour12:true}).format(new Date(createdAt))}
-                userPicturePath={userPicturePath}
-            />
-            <Typography color={main} sx={{ mt: "1rem",whiteSpace: 'pre-line' }} paragraph={true} >
+                <Box m='-.6rem 0 .5em .4rem' display='flex' alignItems='inherit' gap='1rem' sx={{ color: palette.neutral.mediumMain }}>
+                    <FlexBetween gap='1rem'>
+                        <CachedOutlined />
+                        <Typography align='left' variant="subtitle1" >
+                            {vfname + vlname !== sfname + slname ?
+                                <Link href={`/profile/${post.user._id}`} underline='hover'>{`${sfname} ${slname}`}</Link>
+                                : <Link  underline='none'>You</Link>
+                            } shared this post
+                        </Typography>
+                    </FlexBetween>
+                </Box>  )
+            }
+            <FlexBetween>
+                <UserInfo
+                    personId={postUserId}
+                    name={`${firstName} ${lastName}`}
+                    subtitle={new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short', year: "numeric", hour: 'numeric', minute: 'numeric', hour12: true, weekday: 'short' }).format(new Date(createdAt))}
+                    userPicturePath={userPicturePath}
+                    isProfile={isProfile}
+                />
+                {(userId === postUserId && !isProfile)&&
+                    (<Tooltip title='Edit post'>
+                        <IconButton>
+                            <EditOutlined sx={{ color: palette.primary.dark }} />
+                        </IconButton>
+                    </Tooltip>)
+                }
+            </FlexBetween>
+            <Typography color={main} sx={{ mt: "1rem", whiteSpace: 'pre-line' }} paragraph={true} >
                 {!showFullText && description.length > 202 ? (description.substring(0, 198) + '...') : description}
             </Typography>
             {description.length > 202 && (
@@ -153,16 +161,10 @@ const PostWidget = ({post}) => {
                                 </SvgIcon>
                             </IconButton>
                         </Tooltip>
-                        <Typography>{commentsCount}</Typography>
+                        <Typography>{shareCount}</Typography>
                     </FlexBetween>
                 </FlexBetween>
                 <FlexBetween gap='1rem'>
-                    <Tooltip title='Impressions'>
-                        <FlexBetween gap="0.3rem">
-                            <AutoGraphOutlined />
-                            <Typography>{likeCount + commentsCount + views}</Typography>
-                        </FlexBetween>
-                    </Tooltip>
                     <IconButton>
                         <ShareOutlined />
                     </IconButton>

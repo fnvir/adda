@@ -26,12 +26,12 @@ const Posts = ({ userId, isProfile = false }) => {
 
     const getUserPosts = async () => {
         await fetch(
-            `${host}/posts/${userId}/posts`,{
+            `${host}/users/${userId}/posts`,{
                 method: "GET",
                 headers: { Authorization: `Bearer ${token}` },
             }).then(async(res)=>{
-                if(!res.ok) throw new Error(res)
                 const data = await res.json();
+                if(!res.ok) throw new Error(Object.values(data)[0])
                 dispatch(setPosts({ posts: data }));
             }).catch(err=>{
                 dispatch(setPosts({posts:[]}))
@@ -45,10 +45,10 @@ const Posts = ({ userId, isProfile = false }) => {
          else 
             getAllPosts();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
-    console.log(posts)
+
     return (
         <>
-            {posts.map(p =><PostWidget key={p._id} post={p}/>)}
+            {posts.map(p =><PostWidget key={p._id} post={p} isProfile={isProfile}/>)}
         </>
     );
 };

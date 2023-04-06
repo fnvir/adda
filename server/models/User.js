@@ -30,16 +30,20 @@ const UserSchema=new mongoose.Schema(
         },
         picturePath:{
             type:String,
-            default:"",
+            default:"default.png",
         },
-        friends:{
-            type:Array,
-            default:[]
+        friendCount:{
+            type:Number,
+            default:0
         },
+        friends:[{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'User',
+            select:false,
+        }],
         location:String,
         occupation:String,
-        viewedProfile:Number,
-        impressions:Number,
+        profileViews:{type:Number,default:0},
     },
     {timestamps:true}
 )

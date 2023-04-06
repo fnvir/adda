@@ -27,11 +27,9 @@ export const register= async(req,res)=>{
             email,
             password:passwordHash,
             picturePath:req.file?.filename || 'default.png',
-            friends,
+            friends:[],
             location,
             occupation,
-            viewedProfile:Math.floor(Math.random()*1000),
-            impressions:Math.round(Math.random()*1000),
         });
         const savedUser=await newUser.save();
         res.status(201).json(savedUser)
