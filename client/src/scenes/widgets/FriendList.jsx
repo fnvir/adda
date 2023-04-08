@@ -1,5 +1,5 @@
 import { PersonRemoveOutlined } from "@mui/icons-material";
-import { IconButton, Skeleton, Tooltip, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Skeleton, Tooltip, Typography, useTheme } from "@mui/material";
 import { Stack } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -69,7 +69,7 @@ const FriendList = ({ userId, othersFriendList=false }) => {
                                 subtitle={friend.location || ''}
                                 userPicturePath={friend.picturePath}
                             />
-                            <Tooltip title={'Remove Friend'}>
+                            <Tooltip title={'Remove Friend'} disableInteractive>
                                 <IconButton
                                     onClick={() => updateFriend(friend._id)}
                                     sx={{ backgroundColor: palette.primary.light, p: "0.6rem" }}
@@ -79,6 +79,7 @@ const FriendList = ({ userId, othersFriendList=false }) => {
                             </Tooltip>
                         </FlexBetween>
                     ))}
+                    {friends.length<1?(<Box display="flex" justifyContent="center" alignItems="center">None</Box>):null}
                 </Stack>)
                 :
                 (<Stack spacing={2}>

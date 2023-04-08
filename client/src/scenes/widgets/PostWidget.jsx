@@ -103,7 +103,7 @@ const PostWidget = ({ post,isProfile=false }) => {
                     isProfile={isProfile}
                 />
                 {(userId === postUserId && !isProfile)&&
-                    (<Tooltip title='Edit post'>
+                    (<Tooltip title='Edit post' disableInteractive>
                         <IconButton>
                             <EditOutlined sx={{ color: palette.primary.dark }} />
                         </IconButton>
@@ -146,7 +146,7 @@ const PostWidget = ({ post,isProfile=false }) => {
                     </FlexBetween>
 
                     <FlexBetween gap="0.3rem" onClick={() => setIsComments(!isComments)}>
-                        <Tooltip title='Comment'>
+                        <Tooltip title='Comment' disableInteractive>
                             <IconButton>
                                 <ChatBubbleOutlineOutlined />
                             </IconButton>
@@ -154,7 +154,7 @@ const PostWidget = ({ post,isProfile=false }) => {
                         <Typography sx={{ cursor: 'pointer' }}>{commentsCount}</Typography>
                     </FlexBetween>
                     <FlexBetween gap="0.3rem">
-                        <Tooltip title='Share'>
+                        <Tooltip title='Share' disableInteractive>
                             <IconButton onClick={handleShare}>
                                 <SvgIcon>
                                     <path d="M13 14h-2a8.999 8.999 0 0 0-7.968 4.81A10.136 10.136 0 0 1 3 18C3 12.477 7.477 8 13 8V2.5L23.5 11 13 19.5V14zm-2-2h4v3.308L20.321 11 15 6.692V10h-2a7.982 7.982 0 0 0-6.057 2.773A10.988 10.988 0 0 1 11 12z" />

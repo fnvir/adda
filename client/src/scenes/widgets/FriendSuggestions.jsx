@@ -1,5 +1,5 @@
 import { PersonAddOutlined } from "@mui/icons-material";
-import { IconButton, Skeleton, Tooltip, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Skeleton, Tooltip, Typography, useTheme } from "@mui/material";
 import { Stack } from "@mui/system";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -65,7 +65,7 @@ const FriendSuggestions = ({ userId }) => {
                                 subtitle={f.location || ''}
                                 userPicturePath={f.picturePath}
                             />
-                            <Tooltip title={'Add Friend'}>
+                            <Tooltip title={'Add Friend'} disableInteractive>
                                 <IconButton
                                     onClick={() => updateFriend(f._id)}
                                     sx={{ backgroundColor: palette.primary.light, p: "0.6rem" }}
@@ -75,6 +75,7 @@ const FriendSuggestions = ({ userId }) => {
                             </Tooltip>
                         </FlexBetween>
                     ))}
+                    {people.length<1?(<Box display="flex" justifyContent="center" alignItems="center">None</Box>):null}
                 </Stack>)
                 :
                 (<Stack spacing={2}>

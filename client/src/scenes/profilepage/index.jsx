@@ -1,4 +1,4 @@
-import { Box, useMediaQuery } from "@mui/material";
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -12,6 +12,7 @@ const ProfilePage = () => {
     const { userId } = useParams();
     const token = useSelector((state) => state.token);
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+    const {palette}=useTheme()
 
     const getUser = () => {
         fetch(`${process.env.REACT_APP_HOSTURL}/users/${userId}`, {
@@ -53,6 +54,11 @@ const ProfilePage = () => {
                     mt={isNonMobileScreens ? undefined : "2rem"}
                 >
                     <Box m="2rem 0" />
+                    <Box display="flex" justifyContent="center" alignItems="center">
+                        <Typography variant="h3" fontWeight="500" color={palette.neutral.dark}>
+                            All Posts
+                        </Typography>
+                    </Box>
                     <ShowPosts userId={userId} isProfile />
                 </Box>
                 {isNonMobileScreens && (

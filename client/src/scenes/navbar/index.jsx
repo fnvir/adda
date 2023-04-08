@@ -116,11 +116,23 @@ const Navbar = () => {
                     </FormControl>
                 </FlexBetween>
             ) : (
-                <IconButton
-                    onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
-                >
-                    <Menu />
-                </IconButton>
+                    <FlexBetween gap='1rem'>
+                        <IconButton
+                            onClick={() => dispatch(changeMode())}
+                            sx={{ fontSize: "25px" }}
+                        >
+                            {theme.palette.mode === "dark" ? (
+                                <DarkMode sx={{ fontSize: "25px" }} />
+                            ) : (
+                                <LightMode sx={{ color: dark, fontSize: "25px" }} />
+                            )}
+                        </IconButton>
+                        <IconButton
+                            onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
+                        >
+                            <Menu />
+                        </IconButton>
+                    </FlexBetween>
             )}
 
             {/* MOBILE NAV */}
@@ -152,16 +164,7 @@ const Navbar = () => {
                         alignItems="center"
                         gap="3rem"
                     >
-                        <IconButton
-                            onClick={() => dispatch(changeMode())}
-                            sx={{ fontSize: "25px" }}
-                        >
-                            {theme.palette.mode === "dark" ? (
-                                <DarkMode sx={{ fontSize: "25px" }} />
-                            ) : (
-                                <LightMode sx={{ color: dark, fontSize: "25px" }} />
-                            )}
-                        </IconButton>
+
                         <Message sx={{ fontSize: "25px" }} />
                         <Notifications sx={{ fontSize: "25px" }} />
                         <Help sx={{ fontSize: "25px" }} />
