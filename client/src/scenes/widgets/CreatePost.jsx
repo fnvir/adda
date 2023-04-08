@@ -82,7 +82,7 @@ const CreatePost = ({ picturePath }) => {
                     mt="1rem"
                     p="2rem"
                 >
-                    <Grid container justifyContent="flex-end" mt='-2rem'>
+                    <Grid container justifyContent="flex-end" mt='-2rem' pr='-4rem'>
                         <IconButton onClick={() => setIsImage(!isImage)} edge='end'>
                             <CloseOutlined />
                         </IconButton>
@@ -94,7 +94,7 @@ const CreatePost = ({ picturePath }) => {
                         onDrop={(acceptedFiles) => setImage(acceptedFiles[0])}
                     >
                         {({ getRootProps, getInputProps }) => (
-                            <FlexBetween>
+                            <FlexBetween gap='2rem'>
                                 <Box
                                     {...getRootProps()}
                                     border={`2px dashed ${palette.primary.main}`}
@@ -116,10 +116,10 @@ const CreatePost = ({ picturePath }) => {
                                 </Box>
                                 {image && (
                                     <IconButton
+                                        edge='end'
                                         onClick={() => setImage(null)}
-                                        sx={{ width: "15%" }}
                                     >
-                                        <DeleteOutlined />
+                                        <DeleteOutlined color="error"/>
                                     </IconButton>
                                 )}
                             </FlexBetween>

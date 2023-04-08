@@ -37,6 +37,20 @@ export const sharePost = async (req, res) => {
     }
 };
 
+export const editPost = async (req, res) => {
+    try {
+        const {description } = req.body;
+        const {id:postId}=req.params;
+        const update={description,picturePath:req.file?.filename||'',edited:true}
+        await Post.findByIdAndUpdate(postId,update);
+        getFeedPosts(req,res)
+    } catch (err) {
+        console.error(err)
+        res.status(409).json({ message: err.message });
+    }
+}
+
+
 // READ
 export const getFeedPosts = async (req, res) => {
     try {
@@ -66,9 +80,7 @@ export const getUserPosts = async (req, res) => {
 };
 
 // update
-export const editPost = async (req, res) => {
 
-}
 
 
 export const likePost = async (req, res) => {

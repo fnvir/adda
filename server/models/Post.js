@@ -21,6 +21,10 @@ const postSchema = mongoose.Schema({
             type:Number,
             default:0
         },
+        edited:{
+            type:Boolean,
+            default:false
+        },
         views: {
             type: Number,
             default: 0,

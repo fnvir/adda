@@ -15,7 +15,7 @@ router.post('/', verifyToken, upload.single('picture'), createPost)
 router.post("/:id/share", verifyToken, upload.none(), sharePost);
 
 /* UPDATE */
-router.patch("/:id/edit", verifyToken, editPost);
+router.patch("/:id/edit", verifyToken, upload.single('picture'), editPost);
 router.patch("/:id/like", verifyToken, likePost);
 router.patch("/:id/comment", verifyToken, commentPost);
 
