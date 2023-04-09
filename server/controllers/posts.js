@@ -68,6 +68,7 @@ export const getFeedPosts = async (req, res) => {
 export const getUserPosts = async (req, res) => {
     try {
         const { userId } = req.params;
+        await User.findByIdAndUpdate(userId,{$inc:{profileViews:1}})
         const post = await Post.find({ user:userId }).populate([
             {path:'user',select:'firstName lastName picturePath'},
             {path:'share',populate: {path:'ogPost',select:'user description picturePath createdAt',populate:{path:'user',select:'firstName lastName picturePath'}}}

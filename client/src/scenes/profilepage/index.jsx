@@ -23,7 +23,6 @@ const ProfilePage = () => {
             if(!res.ok) throw new Error(Object.values(res)[0])
             setUser(data);
             document.title = `${data?.firstName||''} ${data?.lastName||''} - adda`
-            console.log('hereee',data)
         }).catch(err=>console.log(err))
     };
 

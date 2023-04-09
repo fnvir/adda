@@ -4,14 +4,9 @@ import {
     EditOutlined,
     FavoriteBorderOutlined,
     FavoriteOutlined,
-    ShareOutlined,
-    Done,
     DeleteForeverOutlined,
-    DeleteOutlined,
     ClearOutlined,
-    CloseOutlined,
-    CheckCircleOutline,
-    HighlightOffOutlined,
+    Done,
 } from "@mui/icons-material";
 import { Box, IconButton, InputBase, Link, SvgIcon, Tooltip, Typography, useTheme } from "@mui/material";
 import CommentSection from "scenes/widgets/Comments";
@@ -21,7 +16,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setLikes, setPosts } from "state";
-import { Stack } from "@mui/system";
+import { Stack } from "@mui/material";
 import Dropzone from "react-dropzone";
 
 const PostWidget = ({ post, isProfile = false }) => {
@@ -136,7 +131,7 @@ const PostWidget = ({ post, isProfile = false }) => {
                     <Stack direction="row" alignItems="center" gap={1}>
                         {edit&&(<Tooltip title='Save Changes' disableInteractive  placement="left-end">
                             <IconButton onClick={handleEdit} color='success' edge='end' sx={{ marginRight: '-.75rem' }}>
-                                <CheckCircleOutline fontSize='large' />
+                                <Done color='primary' />
                             </IconButton> 
                         </Tooltip>)}
                         <Tooltip title={!edit?'Edit post':'Cancel'} disableInteractive placement="right-end">
@@ -144,7 +139,7 @@ const PostWidget = ({ post, isProfile = false }) => {
                                 {!edit?
                                     <EditOutlined sx={{ color: palette.primary.dark }}/>
                                     :
-                                    <HighlightOffOutlined fontSize='large' sx={{color:'#fe2c54'}}/>
+                                    <ClearOutlined sx={{color:'#fe2c54'}}/>
                                 }
                             </IconButton>
                         </Tooltip>
@@ -184,8 +179,7 @@ const PostWidget = ({ post, isProfile = false }) => {
                         minRows={1}
                         maxRows={20}
                         sx={{
-                            color: main,
-                            backgroundColor: palette.neutral.lighter,
+                            backgroundColor: palette.neutral.light,
                             borderRadius: "1em",
                             padding: "0.5rem 0 .5em .5rem ",
                             marginTop: '.75rem',
@@ -202,7 +196,7 @@ const PostWidget = ({ post, isProfile = false }) => {
                             <FlexBetween>
                                 <Box
                                     {...getRootProps()}
-                                    border={`2px dashed ${palette.primary.main}`}
+                                    border={`2px dashed ${palette.primary.light}`}
                                     borderRadius="1em"
                                     p="0 1rem"
                                     width="100%"
@@ -259,11 +253,9 @@ const PostWidget = ({ post, isProfile = false }) => {
                         <Typography>{shareCount}</Typography>
                     </FlexBetween>
                 </FlexBetween>
-                <FlexBetween gap='1rem'>
-                    <IconButton>
-                        <ShareOutlined />
-                    </IconButton>
-                </FlexBetween>
+                {/* <IconButton color="error">
+                    <DeleteForeverOutlined />
+                </IconButton> */}
             </FlexBetween>
 
             {isComments && <CommentSection postId={postId} userId={userId} />}
