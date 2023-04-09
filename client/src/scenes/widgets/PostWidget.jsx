@@ -18,6 +18,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setLikes, setPosts } from "state";
 import Dropzone from "react-dropzone";
+import timeDiff from "utils";
 
 const PostWidget = ({ post, isProfile = false }) => {
     const isShared = post.share?.isShared || false;
@@ -46,8 +47,6 @@ const PostWidget = ({ post, isProfile = false }) => {
     const isLiked = Boolean(likes[userId]);
     const likeCount = Object.keys(likes).length;
     const { palette } = useTheme();
-    const main = palette.neutral.main;
-    const primary = palette.primary.main;
     const patchLike = async () => {
         await fetch(`${process.env.REACT_APP_HOSTURL}/posts/${postId}/like`, {
             method: "PATCH",
@@ -101,6 +100,17 @@ const PostWidget = ({ post, isProfile = false }) => {
         }).catch(err => console.error(err));
     };
 
+    const handleDelete = async() => {
+        await fetch(`${process.env.REACT_APP_HOSTURL}/posts/${!isShared?postId : post.share.ogPost._id}/delete`, {
+            method: "PATCH",
+            headers: { Authorization: `Bearer ${token}` },
+        }).then(async(res)=>{
+            const posts = await res.json();
+            if(!res.ok) throw new Error(Object.values(posts)[0])
+            dispatch(setPosts({ posts }));
+            setEdit(false)
+        }).catch(err => console.error(err));
+    };
 
     return (
         <WidgetWrapper m="1.5rem 0 0 0">
@@ -122,7 +132,8 @@ const PostWidget = ({ post, isProfile = false }) => {
                 <UserInfo
                     personId={postUserId}
                     name={`${firstName} ${lastName}`}
-                    subtitle={new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short', year: "numeric", hour: 'numeric', minute: 'numeric', hour12: true, weekday: 'short' }).format(new Date(createdAt))+(edited?' . Edited':'')}
+                    time={createdAt}
+                    subtitle={(edited?' . Edited':null)}
                     userPicturePath={userPicturePath}
                     isProfile={isProfile}
                 />
@@ -134,8 +145,15 @@ const PostWidget = ({ post, isProfile = false }) => {
                                 <Done color='primary' />
                             </IconButton> 
                         </Tooltip>)}
-                        <Tooltip title={!edit?'Edit post':'Cancel'} disableInteractive placement="right-end">
-                            <IconButton onClick={() => setEdit(!edit)}>
+                        {!edit && (
+                            <Tooltip title='Delete post' disableInteractive>
+                                <IconButton color='error' edge='end' onClick={handleDelete}>
+                                    <DeleteForeverOutlined />
+                                </IconButton>
+                            </Tooltip>
+                        )}
+                        <Tooltip title={!edit?'Edit post':'Cancel'} disableInteractive>
+                            <IconButton onClick={() => setEdit(!edit)} edge='end'>
                                 {!edit?
                                     <EditOutlined sx={{ color: palette.primary.dark }}/>
                                     :
@@ -148,7 +166,7 @@ const PostWidget = ({ post, isProfile = false }) => {
                 }
             </FlexBetween>
             {!edit && (<>
-                <Typography color={main} sx={{ mt: "1rem", whiteSpace: 'pre-line' }} paragraph={true} >
+                <Typography color={palette.neutral.main} sx={{ mt: "1rem", whiteSpace: 'pre-line' }} paragraph={true} >
                     {!showFullText && description.length > 202 ? (description.substring(0, 198) + '...') : description}
                 </Typography>
                 {description.length > 202 && (
@@ -231,7 +249,7 @@ const PostWidget = ({ post, isProfile = false }) => {
                     <FlexBetween gap="0.3rem">
                         <IconButton onClick={patchLike}>
                             {isLiked ? (
-                                <FavoriteOutlined sx={{ color: primary }} />
+                                <FavoriteOutlined sx={{ color: palette.primary.main }} />
                             ) : (
                                 <FavoriteBorderOutlined />
                             )}

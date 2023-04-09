@@ -1,9 +1,12 @@
-import { Box, Link, Typography, useTheme } from "@mui/material";
+import { Box, Link, Tooltip, Typography, useTheme } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import UserImage from "../../components/UserImage";
+import timeDiff from "utils";
 
-const UserInfo = ({ personId, name, subtitle, userPicturePath, isProfile=false }) => {
+const UserInfo = ({ personId, name, subtitle=null, userPicturePath, isProfile=false, time=null }) => {
     const { palette } = useTheme();
+    const tym=new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short', year: "numeric", hour: 'numeric', minute: 'numeric', hour12: true, weekday: 'short' }).format(new Date(time));
+    const tymdiff = timeDiff(Date.now()-new Date(time))
     return (
         <FlexBetween>
             <FlexBetween gap="1rem">
@@ -24,9 +27,18 @@ const UserInfo = ({ personId, name, subtitle, userPicturePath, isProfile=false }
                     >
                         {name}
                     </Link>
-                    <Typography color={palette.neutral.medium} fontSize="0.75rem">
-                        {subtitle}
-                    </Typography>
+                    <Box sx={{display: 'flex',flexDirection: 'row', alignContent: 'flex-start' }} spacing={0}>
+                        {time && 
+                            <Tooltip title={tym} disableInteractive>
+                                <Typography color={palette.neutral.medium} fontSize="0.75rem">
+                                    {tymdiff}
+                                </Typography>
+                            </Tooltip>
+                        }
+                        <Typography color={palette.neutral.medium} fontSize="0.75rem">
+                            {subtitle}
+                        </Typography>
+                    </Box>
                 </Box>
             </FlexBetween>
         </FlexBetween>

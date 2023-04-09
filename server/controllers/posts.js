@@ -50,6 +50,17 @@ export const editPost = async (req, res) => {
     }
 }
 
+export const deletePost = async (req, res) => {
+    try {
+        const {id:postId}=req.params;
+        await Post.findByIdAndDelete(postId);
+        getFeedPosts(req,res)
+    } catch (err) {
+        console.error(err)
+        res.status(409).json({ message: err.message });
+    }
+}
+
 
 // READ
 export const getFeedPosts = async (req, res) => {

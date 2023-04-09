@@ -3,6 +3,7 @@ import { Avatar, Box, CircularProgress, Divider, Grid, IconButton, InputBase, Ty
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateComments } from "state";
+import timeDiff from "utils";
 
 
 
@@ -48,8 +49,8 @@ const CommentSection = ({ userId, postId}) => {
         let c=comments[i];
         ret.push((
             <Box key={`${c._id}`} style={{ padding: "1em"}}>
-                <Typography align='right' mt='-1rem' sx={{display:'block'}} variant='caption' color={palette.neutral.medium} >
-                    {new Date(c.createdAt).toUTCString()}
+                <Typography align='right' mt='-1rem' sx={{display:'block'}} variant='caption' fontWeight='bold' color={palette.neutral.medium} >
+                    {timeDiff(Date.now()-new Date(c.createdAt))}
                 </Typography>
                 <Grid container wrap='nowrap' spacing={2} marginTop='-1rem'>
                     <Grid item>
