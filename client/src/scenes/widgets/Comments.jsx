@@ -45,7 +45,7 @@ const CommentSection = ({ userId, postId}) => {
     }
 
     let ret=[];
-    for(let i=comments.length-1;i>-1;i--) {
+    for(let i=0;i<comments.length;i++) {
         let c=comments[i];
         ret.push((
             <Box key={`${c._id}`} style={{ padding: "1em"}}>

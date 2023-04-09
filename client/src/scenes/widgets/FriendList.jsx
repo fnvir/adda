@@ -30,10 +30,9 @@ const FriendList = ({ userId, othersFriendList=false }) => {
 
     const skeletons=[];
     const n=useSelector(state => state.user.friendCount);
-    if(!loaded) {
+    if(!loaded)
         for(let i=0;i<Math.min(n,10);i++)
             skeletons.push(<Skeleton key={'skltn-'+i} variant="rounded" width='100%' height='2.5rem' animation='wave'/>)
-    }
 
     if (!loaded) {
         fetch(`${process.env.REACT_APP_HOSTURL}/users/${userId}/friends`, {
@@ -50,7 +49,7 @@ const FriendList = ({ userId, othersFriendList=false }) => {
     }
 
     return (
-        <WidgetWrapper sx={{'max-height':`${4.3+3.5*10}rem`,'overflow':'auto'}}>
+        <WidgetWrapper sx={{'maxHeight':`${4.3+3.5*10}rem`,'overflow':'auto'}}>
             <Typography
                 color={palette.neutral.darker}
                 variant="h5"

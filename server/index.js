@@ -43,4 +43,3 @@ mongoose.connect(process.env.MONGO_URL,{
     app.listen(PORT,()=>console.log('\n\x1b[36m%s\x1b[0m\n\x1b[35mPORT: %s\x1b[0m', 'SERVER STARTED!',PORT))
 
 }).catch((error)=>console.error('\x1b[31m%s\x1b[0m',error))
-

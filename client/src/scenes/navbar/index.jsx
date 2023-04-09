@@ -17,7 +17,6 @@ import {
     DarkMode,
     LightMode,
     Notifications,
-    Help,
     Menu,
     Close,
 } from "@mui/icons-material";
@@ -89,7 +88,6 @@ const Navbar = () => {
                     </Tooltip>
                     <Message sx={{ fontSize: "25px" }} />
                     <Notifications sx={{ fontSize: "25px" }} />
-                    <Help sx={{ fontSize: "25px" }} />
                     <FormControl variant="standard" value={fullName}>
                         <Select
                             value={fullName}
@@ -167,7 +165,6 @@ const Navbar = () => {
 
                         <Message sx={{ fontSize: "25px" }} />
                         <Notifications sx={{ fontSize: "25px" }} />
-                        <Help sx={{ fontSize: "25px" }} />
                         <FormControl variant="standard" value={fullName}>
                             <Select
                                 value={fullName}

@@ -6,16 +6,16 @@ import { checkStrength } from '../middleware/auth.js'
 // Register user
 export const register= async(req,res)=>{
     try{
-        const {
+        let {
             firstName,
             lastName,
             email,
             password,
-            friends,
             location,
             occupation
         } = req.body;
-        if(await User.findOne({email:email}))
+        email=email.toLowerCase();
+        if(await User.findOne({email}))
             return res.status(400).json({msg:'Email already in use !',err:'email'})
         let z=checkStrength(password);
         if(!z.strong) return res.status(400).json({msg:z.msg,err:'password'})
@@ -43,7 +43,8 @@ export const register= async(req,res)=>{
 export const login =async(req,res)=>{
     try{
         // throw new Error('500 test')
-        const {email,password}=req.body;
+        let {email,password}=req.body;
+        email=email.toLowerCase()
         const user=await User.findOne({email:email}).select('+password')
         if(!user)
             return res.status(400).json({msg:'User not found !',err:'email'})

@@ -18,7 +18,6 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setLikes, setPosts } from "state";
 import Dropzone from "react-dropzone";
-import timeDiff from "utils";
 
 const PostWidget = ({ post, isProfile = false }) => {
     const isShared = post.share?.isShared || false;

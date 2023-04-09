@@ -43,7 +43,7 @@ const FriendSuggestions = ({ userId }) => {
         .catch(err => console.error(err))
     }
     return (
-        <WidgetWrapper sx={{'max-height':`${4.3+3.5*8}rem`,'overflow':'auto'}}>
+        <WidgetWrapper sx={{'maxHeight':`${4.3+3.5*8}rem`,'overflow':'auto'}}>
             <Typography
                 color={palette.neutral.darker}
                 variant="h5"
