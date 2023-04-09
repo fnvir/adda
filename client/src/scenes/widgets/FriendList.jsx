@@ -50,7 +50,7 @@ const FriendList = ({ userId, othersFriendList=false }) => {
     }
 
     return (
-        <WidgetWrapper>
+        <WidgetWrapper sx={{'max-height':`${4.3+3.5*10}rem`,'overflow':'auto'}}>
             <Typography
                 color={palette.neutral.darker}
                 variant="h5"

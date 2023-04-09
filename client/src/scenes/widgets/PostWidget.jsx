@@ -7,8 +7,9 @@ import {
     DeleteForeverOutlined,
     ClearOutlined,
     Done,
+    DeleteOutlineRounded,
 } from "@mui/icons-material";
-import { Box, IconButton, InputBase, Link, SvgIcon, Tooltip, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, InputBase, Link, Stack, SvgIcon, Tooltip, Typography, useTheme } from "@mui/material";
 import CommentSection from "scenes/widgets/Comments";
 import FlexBetween from "components/FlexBetween";
 import UserInfo from "scenes/widgets/UserInfo";
@@ -16,7 +17,6 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setLikes, setPosts } from "state";
-import { Stack } from "@mui/material";
 import Dropzone from "react-dropzone";
 
 const PostWidget = ({ post, isProfile = false }) => {
@@ -152,12 +152,17 @@ const PostWidget = ({ post, isProfile = false }) => {
                     {!showFullText && description.length > 202 ? (description.substring(0, 198) + '...') : description}
                 </Typography>
                 {description.length > 202 && (
-                    <Typography sx={{
-                        "&:hover": {
-                            color: palette.primary.main,
-                            cursor: "pointer",
-                        }
-                    }} onClick={() => setFullText(!showFullText)}>
+                    <Typography
+                        sx={{
+                            "&:hover": {
+                                color: palette.primary.main,
+                                cursor: "pointer",
+                            }
+                        }}
+                        onClick={() => setFullText(!showFullText)}
+                        fontWeight='500'
+                        mt='-.75rem'
+                    >
                         {'Show ' + (showFullText ? 'less' : 'more')}
                     </Typography>
                 )}
@@ -179,7 +184,7 @@ const PostWidget = ({ post, isProfile = false }) => {
                         minRows={1}
                         maxRows={20}
                         sx={{
-                            backgroundColor: palette.neutral.light,
+                            backgroundColor: palette.neutral.lighter,
                             borderRadius: "1em",
                             padding: "0.5rem 0 .5em .5rem ",
                             marginTop: '.75rem',
@@ -193,30 +198,30 @@ const PostWidget = ({ post, isProfile = false }) => {
                         onDrop={(acceptedFiles) => setImage(acceptedFiles[0])}
                     >
                         {({ getRootProps, getInputProps }) => (
-                            <FlexBetween>
+                            <Stack direction="row" alignItems="center" gap={2}>
                                 <Box
                                     {...getRootProps()}
-                                    border={`2px dashed ${palette.primary.light}`}
+                                    backgroundColor={palette.neutral.light}
                                     borderRadius="1em"
                                     p="0 1rem"
-                                    width="100%"
+                                    max-width="100%"
                                     sx={{ "&:hover": { cursor: "pointer" } }}
                                 >
                                     <input {...getInputProps()} />
                                     {!image? 
                                     (<p>Click to add image</p>)
                                     :
-                                    (<FlexBetween>
+                                    (<FlexBetween gap={1}>
                                         <p>{image?.name||image}</p>
                                         <EditOutlined/>
                                     </FlexBetween>)}
                                 </Box>
                                 {image&&(<Tooltip title='Remove image' disableInteractive placement="right-end">
                                     <IconButton onClick={() => setImage(null)}>
-                                        <ClearOutlined color="error" />
+                                        <DeleteOutlineRounded color="error" />
                                     </IconButton>
                                 </Tooltip>)}
-                            </FlexBetween>
+                            </Stack>
                         )}
                     </Dropzone>
                 </Stack>

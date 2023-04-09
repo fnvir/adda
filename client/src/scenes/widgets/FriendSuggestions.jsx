@@ -1,6 +1,5 @@
 import { PersonAddOutlined } from "@mui/icons-material";
-import { Box, IconButton, Skeleton, Tooltip, Typography, useTheme } from "@mui/material";
-import { Stack } from "@mui/system";
+import { Box, IconButton, Skeleton, Stack, Tooltip, Typography, useTheme } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
@@ -44,7 +43,7 @@ const FriendSuggestions = ({ userId }) => {
         .catch(err => console.error(err))
     }
     return (
-        <WidgetWrapper>
+        <WidgetWrapper sx={{'max-height':`${4.3+3.5*8}rem`,'overflow':'auto'}}>
             <Typography
                 color={palette.neutral.darker}
                 variant="h5"
