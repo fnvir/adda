@@ -55,7 +55,7 @@ const CommentSection = ({ userId, postId}) => {
                 </Typography>
                 <Grid container wrap='nowrap' spacing={2} marginTop='-1rem'>
                     <Grid item>
-                        <UserImage size='40px' alt={c.user.firstName} src={`${process.env.REACT_APP_HOSTURL}/assets/${c.user.picturePath||'default.png'}`} />
+                        <UserImage size='40px' alt={c.user.firstName} image={c.user?.picturePath||'none'} />
                     </Grid>
                     <Grid item xs zeroMinWidth sx={{ padding: '0 auto' }}>
                         <Typography>
@@ -105,7 +105,9 @@ const CommentSection = ({ userId, postId}) => {
             />
             <Divider sx={{ marginTop: '1rem',marginBottom:'.5rem'  }} />
             {!loading ?
-                ret
+                (<Box sx={{'maxHeight':`35rem`,'overflow':'auto'}}>
+                    {ret}
+                </Box>)
                 :
                 (<Box display="flex" justifyContent="center" alignItems="center">
                     <CircularProgress disableShrink />

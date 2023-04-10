@@ -257,7 +257,11 @@ const PostWidget = ({ post, isProfile = false }) => {
                                 <FavoriteBorderOutlined />
                             )}
                         </IconButton>
-                        <Typography>{likeCount}</Typography>
+                        <Tooltip title={likeCount>1e3?likeCount:null} placement="top" disableInteractive>
+                            <Typography>
+                                {Intl.NumberFormat('en',{notation:'compact'}).format(likeCount)}
+                            </Typography>
+                        </Tooltip>
                     </FlexBetween>
 
                     <FlexBetween gap="0.3rem" onClick={() => setIsComments(!isComments)}>
@@ -266,7 +270,11 @@ const PostWidget = ({ post, isProfile = false }) => {
                                 <ChatBubbleOutlineOutlined />
                             </IconButton>
                         </Tooltip>
-                        <Typography sx={{ cursor: 'pointer' }}>{commentsCount}</Typography>
+                        <Tooltip title={commentsCount>1e3?commentsCount:null} disableInteractive placement="top">
+                            <Typography sx={{ cursor: 'pointer' }}>
+                                {Intl.NumberFormat('en',{notation:'compact'}).format(commentsCount)}
+                            </Typography>
+                        </Tooltip>
                     </FlexBetween>
                     <FlexBetween gap="0.3rem">
                         <Tooltip title='Share' disableInteractive>
@@ -276,14 +284,14 @@ const PostWidget = ({ post, isProfile = false }) => {
                                 </SvgIcon>
                             </IconButton>
                         </Tooltip>
-                        <Typography>{shareCount}</Typography>
+                        <Tooltip title={shareCount>1e3?shareCount:null} placement="top" disableInteractive>
+                            <Typography>
+                                {Intl.NumberFormat('en',{notation:'compact'}).format(shareCount)}
+                            </Typography>
+                        </Tooltip>
                     </FlexBetween>
                 </FlexBetween>
-                {/* <IconButton color="error">
-                    <DeleteForeverOutlined />
-                </IconButton> */}
             </FlexBetween>
-
             {isComments && <CommentSection postId={postId} userId={userId} />}
         </WidgetWrapper>
     );
