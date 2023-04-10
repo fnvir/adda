@@ -190,6 +190,10 @@ const PostWidget = ({ post, isProfile = false }) => {
                         alt="post"
                         style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
                         src={`${process.env.REACT_APP_HOSTURL}/assets/${picturePath}`}
+                        onError={({ currentTarget })=>{
+                            currentTarget.onerror = null;
+                            currentTarget.src=`${process.env.REACT_APP_HOSTURL}/assets/404.png`
+                        }}
                     />
                 )}</>)}
             {edit &&

@@ -31,10 +31,9 @@ const UserWidget = ({ userId, picturePath, isProfile=false }) => {
             if (!res.ok) return;
             setUser(data);
         }).catch(err => {
-            console.errror(err)
+            console.error(err)
         })
     };
-    const friendCount = useSelector(state => state.user.friendCount)
 
     useEffect(() => {
         getUser();
@@ -60,6 +59,7 @@ const UserWidget = ({ userId, picturePath, isProfile=false }) => {
         firstName,
         lastName,
         location,
+        friendCount,
         occupation,
         profileViews,
         createdAt

@@ -41,8 +41,6 @@ export const getNonFriends = async (req, res) => {
     }
 };
 
-
-
 // UPDATE
 export const addRemoveFriend = async (req, res) => {
     try {
@@ -53,16 +51,16 @@ export const addRemoveFriend = async (req, res) => {
         const self = await User.findById(id).select('+friends')
         const other = await User.findById(friendId).select('+friends')
 
-        if (self.friends.some(e=>e.equals(friendId))) {
+        if (self.friends.some(e=>e.equals(friendId))) { //remove
             self.friends = self.friends.filter((_id) => _id != friendId);
             other.friends = other.friends.filter((_id) => _id != id);
-            ++self.friendCount
-            ++other.friendCount
+            --self.friendCount
+            --other.friendCount
         } else {
             self.friends.push(friendId);
             other.friends.push(id)
-            --self.friendCount
-            --other.friendCount
+            ++self.friendCount
+            ++other.friendCount
         }
 
         await self.save();

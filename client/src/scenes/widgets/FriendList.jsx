@@ -29,7 +29,7 @@ const FriendList = ({ userId, othersFriendList=false }) => {
     };
 
     const skeletons=[];
-    const n=useSelector(state => state.user.friendCount);
+    const n=useSelector(state => state.user.friendCount) || 2;
     if(!loaded)
         for(let i=0;i<Math.min(n,10);i++)
             skeletons.push(<Skeleton key={'skltn-'+i} variant="rounded" width='100%' height='2.5rem' animation='wave'/>)

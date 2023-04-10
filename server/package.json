@@ -20,10 +20,10 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"nodemon index"
+    "start":"node index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Farhan Tanvir",
   "license": "ISC",
-  "description": ""
+  "description": "social media app"
 }

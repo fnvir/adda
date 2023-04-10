@@ -54,6 +54,7 @@ export const deletePost = async (req, res) => {
     try {
         const {id:postId}=req.params;
         await Post.findByIdAndDelete(postId);
+        await Post.deleteMany({'share.ogPost':postId})
         getFeedPosts(req,res)
     } catch (err) {
         console.error(err)

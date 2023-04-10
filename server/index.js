@@ -18,12 +18,16 @@ const __dirname = path.dirname(__filename)
 dotenv.config()
 const app=express()
 app.use(express.json())
+app.use('*', cors({ 
+    AccessControlAllowOrigin: '*',  
+    origin: '*',  
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE' 
+}))
 app.use(helmet())
 app.use(helmet.crossOriginResourcePolicy({policy:"cross-origin"}))
 app.use(morgan('common'))
 app.use(bodyParser.json({limit:"15mb",extended:true}))
 app.use(bodyParser.urlencoded({limit:"15mb",extended:true}))
-app.use(cors())
 app.use("/assets",express.static(path.join(__dirname,'public/assets')))
 
 
