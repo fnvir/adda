@@ -61,7 +61,8 @@ const UserWidget = ({ userId, picturePath, isProfile=false }) => {
         location,
         occupation,
         profileViews,
-        createdAt
+        createdAt,
+        friendCount:frndCnt
     } = user;
     const d=new Date(createdAt)
 
@@ -88,10 +89,10 @@ const UserWidget = ({ userId, picturePath, isProfile=false }) => {
                         >
                             {firstName} {lastName}
                         </Typography>
-                        <Typography color={palette.neutral.dark}>{friendCount} friends</Typography>
+                        <Typography color={palette.neutral.dark}>{isProfile?frndCnt:friendCount} friends</Typography>
                     </Box>
                 </FlexBetween>
-                <IconButton onClick={() => isProfile?null:navigate(`/profile/${userId}`)}>
+                <IconButton onClick={null}>
                     <ManageAccountsOutlined />
                 </IconButton>
             </FlexBetween>
