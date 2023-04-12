@@ -3,7 +3,7 @@ import {
     LocationOnOutlined,
     WorkOutlineOutlined,
 } from "@mui/icons-material";
-import { Box, Typography, Divider, useTheme, Skeleton, Stack } from "@mui/material";
+import { Box, Typography, Divider, useTheme, Skeleton, Stack, IconButton } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -16,8 +16,8 @@ const UserWidget = ({ userId, picturePath, isProfile=false }) => {
     const [loaded, setLoaded] = useState(false);
     const { palette } = useTheme();
     const navigate = useNavigate();
+    const friendCount = useSelector(state=>state.user.friendCount)
     const token = useSelector((state) => state.token);
-    const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
 
@@ -59,7 +59,6 @@ const UserWidget = ({ userId, picturePath, isProfile=false }) => {
         firstName,
         lastName,
         location,
-        friendCount,
         occupation,
         profileViews,
         createdAt
@@ -78,7 +77,7 @@ const UserWidget = ({ userId, picturePath, isProfile=false }) => {
                     <Box>
                         <Typography
                             variant="h4"
-                            color={dark}
+                            color={palette.neutral.dark}
                             fontWeight="500"
                             sx={!isProfile && {
                                 "&:hover": {
@@ -92,7 +91,9 @@ const UserWidget = ({ userId, picturePath, isProfile=false }) => {
                         <Typography color={palette.neutral.dark}>{friendCount} friends</Typography>
                     </Box>
                 </FlexBetween>
-                <ManageAccountsOutlined />
+                <IconButton onClick={() => isProfile?null:navigate(`/profile/${userId}`)}>
+                    <ManageAccountsOutlined />
+                </IconButton>
             </FlexBetween>
 
             <Divider />
