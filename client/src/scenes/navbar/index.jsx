@@ -22,28 +22,35 @@ import {
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { changeMode, setLogout } from "state";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import FlexBetween from "components/FlexBetween";
 
 const Navbar = () => {
-    const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
     const user = useSelector((state) => state.user);
+    const [mobileMenu, setMobileMenu] = useState(false);
+    const [query, setQuery] = useState(new URLSearchParams(location.search).get('q')??'');
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
     const theme = useTheme();
     const neutralLight = theme.palette.neutral.light;
     const dark = theme.palette.neutral.dark;
-    const background = theme.palette.background.default;
-    const primaryLight = theme.palette.primary.light;
-    const alt = theme.palette.background.alt;
-
+    
     const fullName = `${user.firstName} ${user.lastName}`;
-    // const fullName = 'Farhan Tanvir';
+
+    const search=(e)=>{
+        e.preventDefault();
+        const z=query.trim(),q=new URLSearchParams(location.search);
+        if(z.length && z!=q.get('q')){
+            q.set('q',z);
+            navigate(`/search?${q}`)
+        }
+    };
 
     return (
-        <FlexBetween padding="1rem 6%" backgroundColor={alt}>
+        <FlexBetween padding="1rem 6%" backgroundColor={theme.palette.background.alt}>
             <FlexBetween gap="1.75rem">
                 <Typography
                     fontWeight="bold"
@@ -52,7 +59,7 @@ const Navbar = () => {
                     onClick={() => navigate("/home")}
                     sx={{
                         "&:hover": {
-                            color: primaryLight,
+                            color: theme.palette.primary.light,
                             cursor: "pointer",
                         },
                     }}
@@ -66,10 +73,17 @@ const Navbar = () => {
                         gap="3rem"
                         padding="0.1rem 1.5rem"
                     >
-                        <InputBase placeholder="Search..." />
-                        <IconButton>
-                            <Search />
-                        </IconButton>
+                        <form onSubmit={search}>
+                            <InputBase 
+                                onSubmit={search} 
+                                placeholder="Search..." 
+                                value={query} 
+                                onChange={e=>setQuery(e.target.value)} 
+                            />
+                            <IconButton type="submit" aria-label="search">
+                                <Search/>
+                            </IconButton>
+                        </form>
                     </FlexBetween>
                 )}
             </FlexBetween>
@@ -126,7 +140,7 @@ const Navbar = () => {
                             )}
                         </IconButton>
                         <IconButton
-                            onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
+                            onClick={() => setMobileMenu(!mobileMenu)}
                         >
                             <Menu />
                         </IconButton>
@@ -134,7 +148,7 @@ const Navbar = () => {
             )}
 
             {/* MOBILE NAV */}
-            {!isNonMobileScreens && isMobileMenuToggled && (
+            {!isNonMobileScreens && mobileMenu && (
                 <Box
                     position="fixed"
                     right="0"
@@ -143,12 +157,12 @@ const Navbar = () => {
                     zIndex="10"
                     maxWidth="500px"
                     minWidth="300px"
-                    backgroundColor={background}
+                    backgroundColor={theme.palette.background.default}
                 >
                     {/* CLOSE ICON */}
                     <Box display="flex" justifyContent="flex-end" p="1rem">
                         <IconButton
-                            onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
+                            onClick={() => setMobileMenu(!mobileMenu)}
                         >
                             <Close />
                         </IconButton>

@@ -1,8 +1,8 @@
 const a=[1000,60,60,24,30.43685,12]
-const b=['s','m','h','d','months','y']
+const b=['s','m','h','d','mo','y']
 
 function timeDiff(ms){
-    if(ms<1000) return '0s'
+    if(ms<60*1000) return '<1m'
     let i=0;
     for(;i<a.length;i++) {
         if((ms/a[i]|0)==0) break

@@ -92,9 +92,19 @@ export const getUserPosts = async (req, res) => {
     }
 };
 
-// update
-
-
+export const searchPosts = async (req, res) => {
+    try {
+        const {query} = req.body;
+        const post = await Post.find({$text:{$search:query}}).populate([
+            {path:'user',select:'firstName lastName picturePath'},
+            {path:'share',populate: {path:'ogPost',select:'user description picturePath createdAt',populate:{path:'user',select:'firstName lastName picturePath'}}}
+            ]).sort({score:{$meta:"textScore"}});
+        res.status(200).json(post);
+    } catch (err) {
+        console.error(err)
+        res.status(404).json({ message: err.message });
+    }
+};
 
 export const likePost = async (req, res) => {
     try {

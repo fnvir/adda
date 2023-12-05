@@ -19,6 +19,8 @@ const commentSchema = mongoose.Schema({
     { timestamps: true }
 );
 
+commentSchema.index({comment:'text'})
+
 const Comment = mongoose.model("Comment", commentSchema);
 
 export default Comment;

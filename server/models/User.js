@@ -48,5 +48,9 @@ const UserSchema=new mongoose.Schema(
     {timestamps:true}
 )
 
+UserSchema.index({firstName:'text',lastName:'text',location:'text',occupation:'text'},
+    {name:'user Index', weights: {firstName: 10, lastName: 10, location: 2, occupation: 1}});
+
+
 const User=mongoose.model('User',UserSchema);
 export default User;

@@ -18,6 +18,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setLikes, setPosts } from "state";
 import Dropzone from "react-dropzone";
+import { useParams } from "react-router-dom";
 
 const PostWidget = ({ post, isProfile = false }) => {
     const isShared = post.share?.isShared || false;
@@ -41,7 +42,8 @@ const PostWidget = ({ post, isProfile = false }) => {
     const [image, setImage] = useState(picturePath);
     const dispatch = useDispatch();
     const token = useSelector(state => state.token);
-    const { _id: userId, firstName: vfname, lastName: vlname } = useSelector(state => state.user)
+    const {userId:vpid}=useParams();
+    const { _id: userId } = useSelector(state => state.user)
     const { firstName: sfname, lastName: slname } = post.user;
     const isLiked = Boolean(likes[userId]);
     const likeCount = Object.keys(likes).length;
@@ -100,7 +102,7 @@ const PostWidget = ({ post, isProfile = false }) => {
     };
 
     const handleDelete = async() => {
-        await fetch(`${process.env.REACT_APP_HOSTURL}/posts/${!isShared?postId : post.share.ogPost._id}/delete`, {
+        await fetch(`${process.env.REACT_APP_HOSTURL}/posts/${postId}/delete`, {
             method: "PATCH",
             headers: { Authorization: `Bearer ${token}` },
         }).then(async(res)=>{
@@ -110,6 +112,8 @@ const PostWidget = ({ post, isProfile = false }) => {
             setEdit(false)
         }).catch(err => console.error(err));
     };
+    
+    const alreadyAtProfile=isProfile && vpid==post.user._id;
 
     return (
         <WidgetWrapper m="1.5rem 0 0 0">
@@ -119,10 +123,13 @@ const PostWidget = ({ post, isProfile = false }) => {
                     <FlexBetween gap='1rem'>
                         <CachedOutlined />
                         <Typography align='left' variant="subtitle1" >
-                            {vfname + vlname !== sfname + slname ?
-                                <Link href={`/profile/${post.user._id}`} underline='hover'>{`${sfname} ${slname}`}</Link>
-                                : <Link underline='none'>You</Link>
-                            } shared this post
+                            {<Link
+                                href={alreadyAtProfile?undefined:`/profile/${post.user._id}`}
+                                underline={alreadyAtProfile?'none':'hover'}
+                            >
+                                {post.user._id==userId ?'You':`${sfname} ${slname}`}
+                            </Link>
+                            } shared {postUserId==userId?'your':'this'} post
                         </Typography>
                     </FlexBetween>
                 </Box>)
@@ -136,7 +143,7 @@ const PostWidget = ({ post, isProfile = false }) => {
                     userPicturePath={userPicturePath}
                     isProfile={isProfile}
                 />
-                {(userId === postUserId && !isProfile) &&
+                {(userId === post.user._id ) &&
                     (
                     <Stack direction="row" alignItems="center" gap={1}>
                         {edit&&(<Tooltip title='Save Changes' disableInteractive  placement="left-end">
@@ -151,7 +158,7 @@ const PostWidget = ({ post, isProfile = false }) => {
                                 </IconButton>
                             </Tooltip>
                         )}
-                        <Tooltip title={!edit?'Edit post':'Cancel'} disableInteractive>
+                        {!isShared && (<Tooltip title={!edit?'Edit post':'Cancel'} disableInteractive>
                             <IconButton onClick={() => setEdit(!edit)} edge='end'>
                                 {!edit?
                                     <EditOutlined sx={{ color: palette.primary.dark }}/>
@@ -159,7 +166,7 @@ const PostWidget = ({ post, isProfile = false }) => {
                                     <ClearOutlined sx={{color:'#fe2c54'}}/>
                                 }
                             </IconButton>
-                        </Tooltip>
+                        </Tooltip>)}
                     </Stack>
                     )
                 }

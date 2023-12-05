@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom'
 import Homepage from 'scenes/homepage';
 import Loginpage from 'scenes/loginpage';
 import Profilepage from 'scenes/profilepage';
+import Search from 'scenes/search';
 import { useMemo } from 'react';
 import { useSelector } from "react-redux";
 import { CssBaseline,ThemeProvider } from '@mui/material';
@@ -24,6 +25,7 @@ function App() {
                         <Route path='/login?' element={!isLoggedIn ? <Loginpage/> : <Navigate to='/home' />} />
                         <Route path='/home' element={isLoggedIn ? <Homepage/> : <Navigate to='/' />} />
                         <Route path='/profile/:userId' element={isLoggedIn?<Profilepage/>:<Navigate to='/'/>}/>
+                        <Route path='/search' element={<Search/>} />
                         <Route path='/register' element={<Loginpage pgtype={2} />} />
                         <Route path='/logout' element={<Logout/>} />
                         <Route exact path='*' element={<Navigate to='/'/>} replace />

@@ -44,6 +44,9 @@ const postSchema = mongoose.Schema({
     { timestamps: true }
 );
 
+// text index for searching
+postSchema.index({description:'text'})
+
 const Post = mongoose.model("Post", postSchema);
 
 export default Post;
