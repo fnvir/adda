@@ -62,3 +62,36 @@ export const login =async(req,res)=>{
         res.status(500).json({error:err.message})
     }
 }
+
+export const guestlogin =async(req,res)=>{
+    try{
+        // throw new Error('500 test')
+        let {email,password}=req.body;
+        email=email.toLowerCase()
+        let user=await User.findOne({email:email}).select('+password')
+        if(!user){
+            const salt=await bcrypt.genSalt();
+            const passwordHash= await bcrypt.hash(password,salt);
+            user=new User({
+                firstName:'Guest',
+                lastName:'User',
+                email,
+                password:passwordHash,
+                picturePath:'default.png',
+                friends:[],
+                location:'guest',
+                occupation:'bot',
+            });
+            await user.save();
+        }
+        const isMatch=await bcrypt.compare(password,user.password)
+        if(!isMatch)
+            return res.status(400).json({msg:'Invalid Password !',err:'password'})  
+        const token=jwt.sign({id:user._id},process.env.JWT_SECRET)
+        delete user._doc.password
+        res.status(200).json({token,user})
+    } catch(err){
+        console.error(err)
+        res.status(500).json({error:err.message})
+    }
+}

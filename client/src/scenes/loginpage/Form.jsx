@@ -6,6 +6,9 @@ import {
     useMediaQuery,
     Typography,
     useTheme,
+    Snackbar,
+    Alert,
+    AlertTitle,
 } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
@@ -54,6 +57,13 @@ const Form = ({pgtype}) => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const isLogin = pageType === "login";
     const isRegister = pageType === "register";
+    const [popup,setPopup]=useState({show:false,msg:'',status:'info',title:''})
+
+    const handleClose=(evnt,reason)=>{
+        if (reason==='clickaway') return;
+        setPopup({...popup,show:false})
+    }
+
     const host=process.env.REACT_APP_HOSTURL;
 
     const register = async (values, onSubmitProps) => {
@@ -101,6 +111,27 @@ const Form = ({pgtype}) => {
             onSubmitProps.setErrors({[resp.err]:resp.msg})
     };
 
+    const guestlogin= async()=>{
+        const res = await fetch(`${host}/auth/guestlogin`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({email:'guest@adda.com',password:'guestPASS3'}),
+        });
+        const data = await res.json();
+        if (res.ok) {
+            dispatch(
+                setLogin({
+                    user: data.user,
+                    token: data.token,
+                })
+            );
+            navigate("/home");
+        } else {
+            console.error(data.error)
+            setPopup({status:'error',title:'Guest Login Failed',show:true,msg:'Try again after some time'})
+        }
+    }
+
     const handleFormSubmit = async (values, onSubmitProps) => {
         if (isLogin) await login(values, onSubmitProps);
         if (isRegister) await register(values, onSubmitProps);
@@ -109,6 +140,7 @@ const Form = ({pgtype}) => {
     
 
     return (
+        <>
         <Formik
             onSubmit={handleFormSubmit}
             initialValues={isLogin ? initialValuesLogin : initialValuesRegister}
@@ -186,7 +218,7 @@ const Form = ({pgtype}) => {
                                     p="1rem"
                                 >
                                     <Dropzone
-                                        acceptedFiles=".jpg,.jpeg,.png"
+                                        acceptedFiles=".jpg,.jpeg,.png,.gif,.webp,.apng"
                                         multiple={false}
                                         onDrop={(acceptedFiles) =>
                                             setFieldValue("picture", acceptedFiles[0])
@@ -201,7 +233,7 @@ const Form = ({pgtype}) => {
                                             >
                                                 <input {...getInputProps()} />
                                                 {!values.picture ? (
-                                                    <p>Add Profile Picture</p>
+                                                    <p>Add Profile Picture (Optional)</p>
                                                 ) : (
                                                     <FlexBetween>
                                                         <Typography>{values.picture.name}</Typography>
@@ -276,6 +308,35 @@ const Form = ({pgtype}) => {
                 </form>
             )}
         </Formik>
+        <Typography
+            onClick={async() => {
+                await guestlogin()
+            }}
+            sx={{
+                color: palette.primary.main,
+                textDecoration:'underline',
+                "&:hover": {
+                    cursor: "pointer",
+                    color: palette.primary.light,
+                },
+            }}
+            // fontWeight={'medium'}
+            // align="right"
+        >
+            Or, Continue as Guest
+        </Typography>
+        <Snackbar
+            open={popup.show}
+            anchorOrigin={{vertical:'bottom',horizontal:'right'}}
+            autoHideDuration={2000}
+            onClose={handleClose}
+        >
+            <Alert severity={popup.status} onClose={handleClose}>
+                <AlertTitle>{popup.title}</AlertTitle>
+                {popup.msg}
+            </Alert>
+        </Snackbar>
+        </>
     );
 };
 
