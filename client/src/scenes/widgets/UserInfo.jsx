@@ -1,7 +1,7 @@
 import { Box, Link, Tooltip, Typography, useTheme } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import UserImage from "../../components/UserImage";
-import timeDiff from "utils";
+import {timeDiff} from "utils";
 import { useState } from "react";
 
 const UserInfo = ({ personId, name, subtitle=null, userPicturePath, isProfile=false, time=null }) => {

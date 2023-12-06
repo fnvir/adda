@@ -1,7 +1,7 @@
 import { Box, Skeleton, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearPosts } from "state";
+import { setPosts, clearPosts } from "state";
 import { useLocation } from "react-router-dom";
 import PostWidget from "scenes/widgets/PostWidget";
 
@@ -10,7 +10,8 @@ const SearchPosts = () => {
     const token = useSelector((state) => state.token);
     const location=useLocation();
     const query=new URLSearchParams(location.search).get('q')??'';
-    const [posts,setPosts] = useState()
+    const posts = useSelector((state) => state.posts);
+    const [loaded,setLoaded]=useState(false);
 
     const searchPosts = () => {
         fetch(`${process.env.REACT_APP_HOSTURL}/search/posts`, {
@@ -22,7 +23,8 @@ const SearchPosts = () => {
             const data = await res.json();
             if(!res.ok)
                 throw new Error(Object.values(data)[0])
-            setPosts(data)
+            dispatch(setPosts({ posts: data }));
+            setLoaded(true);
         }).catch((err)=>{
             console.error(err)
             dispatch(clearPosts())
@@ -33,7 +35,7 @@ const SearchPosts = () => {
         searchPosts()
     }, [location.search]); 
 
-    if(!Array.isArray(posts)) {
+    if(!loaded) {
         const a=[]
         for(let i=0;i<3;i++)
             a.push(

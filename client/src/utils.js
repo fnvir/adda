@@ -11,4 +11,32 @@ function timeDiff(ms){
     return parseFloat(ms.toFixed(i==6))+''+b[i-1]
 }
 
-export default timeDiff
+const fileTypes = {
+    'jpg': 'image',
+    'jpeg': 'image',
+    'png': 'image',
+    'gif': 'image',
+    'svg': 'image',
+    'webp': 'image',
+    'apng': 'image',
+    'pdf': 'pdf',
+    'doc': 'document',
+    'docx': 'document',
+    'txt': 'text',
+    'mp3': 'audio',
+    'wav': 'audio',
+    'mp4': 'video',
+    'mkv': 'video',
+    'avi': 'video',
+};
+
+function getFileType(fileName) {
+    const ext = fileName.split('.').pop().toLowerCase();
+    if (fileTypes[ext]) {
+        return fileTypes[ext];
+    } else {
+        return 'unknown';
+    }
+}
+
+export {timeDiff,getFileType}

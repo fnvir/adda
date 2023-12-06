@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLikes, setPosts } from "state";
 import Dropzone from "react-dropzone";
 import { useParams } from "react-router-dom";
+import { getFileType } from "utils";
 
 const PostWidget = ({ post, isProfile = false }) => {
     const isShared = post.share?.isShared || false;
@@ -114,6 +115,7 @@ const PostWidget = ({ post, isProfile = false }) => {
     };
     
     const alreadyAtProfile=isProfile && vpid==post.user._id;
+    const mediatype=getFileType(picturePath||'');
 
     return (
         <WidgetWrapper m="1.5rem 0 0 0">
@@ -190,8 +192,8 @@ const PostWidget = ({ post, isProfile = false }) => {
                         {'Show ' + (showFullText ? 'less' : 'more')}
                     </Typography>
                 )}
-                {picturePath && (
-                    <img
+                {picturePath && mediatype=='image'?
+                    (<img
                         width="100%"
                         height="auto"
                         alt="post"
@@ -199,10 +201,27 @@ const PostWidget = ({ post, isProfile = false }) => {
                         src={`${process.env.REACT_APP_HOSTURL}/assets/${picturePath}`}
                         onError={({ currentTarget })=>{
                             currentTarget.onerror = null;
-                            currentTarget.src=`${process.env.REACT_APP_HOSTURL}/assets/404.png`
+                            currentTarget.src=`404.png`
                         }}
-                    />
-                )}</>)}
+                    />) : mediatype=='video'?
+                    (<video 
+                        controls
+                        poster={`vidplay.png`}
+                        preload="none"
+                        width="100%"
+                        height="auto"
+                        onClick={e=>e.target.play()}
+                        onError={({ currentTarget }) => {
+                            currentTarget.onerror = null;
+                            currentTarget.src = `404.png`
+                        }}>
+                            <source src={`${process.env.REACT_APP_HOSTURL}/assets/${picturePath}`} type="video/mp4" />
+                            Your browser does not support the video tag.
+                    </video>):
+                    (<Typography component={Link} color={palette.primary.dark} p={1} my={1} sx={{backgroundColor:palette.neutral.light, borderRadius:'.5em'}}   href={`${process.env.REACT_APP_HOSTURL}/assets/${picturePath}`}>
+                        {picturePath}
+                    </Typography>)
+                }</>)}
             {edit &&
                 <Stack spacing={2}>
                     <InputBase

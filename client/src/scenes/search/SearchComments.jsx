@@ -3,7 +3,7 @@ import UserImage from "components/UserImage";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import timeDiff from "utils";
+import {timeDiff} from "utils";
 
 
 

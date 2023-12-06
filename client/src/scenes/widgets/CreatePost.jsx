@@ -141,17 +141,17 @@ const CreatePost = ({ picturePath }) => {
                     </Typography>
                 </FlexBetween>
 
-                <FlexBetween gap="0.25rem">
+                <FlexBetween gap="0.25rem" onClick={() => setIsImage(!isImage)}>
                     <VideoCameraBackOutlined sx={{ color: mediumMain }} />
                     <Typography sx={{ display: !isNonMobileScreens ? 'none' : 'inline' }} color={mediumMain}>Clip</Typography>
                 </FlexBetween>
 
-                <FlexBetween gap="0.25rem">
+                <FlexBetween gap="0.25rem" onClick={() => setIsImage(!isImage)}>
                     <MicOutlined sx={{ color: mediumMain }} />
                     <Typography sx={{ display: !isNonMobileScreens ? 'none' : 'inline' }} color={mediumMain}>Audio</Typography>
                 </FlexBetween>
 
-                <FlexBetween gap="0.25rem">
+                <FlexBetween gap="0.25rem" onClick={() => setIsImage(!isImage)}>
                     <AttachFileOutlined sx={{ color: mediumMain }} />
                     <Typography sx={{ display: !isNonMobileScreens ? 'none' : 'inline' }} color={mediumMain}>Attachment</Typography>
                 </FlexBetween>
