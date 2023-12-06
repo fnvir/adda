@@ -80,12 +80,12 @@ const UserWidget = ({ userId, picturePath, isProfile=false }) => {
                             variant="h4"
                             color={palette.neutral.dark}
                             fontWeight="500"
-                            sx={!isProfile && {
+                            sx={!isProfile? ({
                                 "&:hover": {
                                     color: palette.primary.light,
                                     cursor: "pointer",
                                 },
-                            }}
+                            }): undefined}
                         >
                             {firstName} {lastName}
                         </Typography>

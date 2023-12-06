@@ -173,7 +173,8 @@ const PostWidget = ({ post, isProfile = false }) => {
                     )
                 }
             </FlexBetween>
-            {!edit && (<>
+            {!edit && (
+            <>
                 <Typography color={palette.neutral.main} sx={{ mt: "1rem", whiteSpace: 'pre-line' }} paragraph={true} >
                     {!showFullText && description.length > 202 ? (description.substring(0, 198) + '...') : description}
                 </Typography>
@@ -192,36 +193,34 @@ const PostWidget = ({ post, isProfile = false }) => {
                         {'Show ' + (showFullText ? 'less' : 'more')}
                     </Typography>
                 )}
-                {picturePath && mediatype=='image'?
+                {picturePath && (mediatype=='image'?
                     (<img
                         width="100%"
                         height="auto"
                         alt="post"
                         style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
                         src={`${process.env.REACT_APP_HOSTURL}/assets/${picturePath}`}
-                        onError={({ currentTarget })=>{
-                            currentTarget.onerror = null;
-                            currentTarget.src=`404.png`
+                        onError={(e)=>{
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src=`${process.env.PUBLIC_URL}/404.png`
                         }}
-                    />) : mediatype=='video'?
-                    (<video 
+                    />) : mediatype=='video'? (
+                    <video 
                         controls
-                        poster={`vidplay.png`}
+                        poster={`${process.env.PUBLIC_URL}/vidplay.png`}
                         preload="none"
                         width="100%"
                         height="auto"
                         onClick={e=>e.target.play()}
-                        onError={({ currentTarget }) => {
-                            currentTarget.onerror = null;
-                            currentTarget.src = `404.png`
-                        }}>
+                    >
                             <source src={`${process.env.REACT_APP_HOSTURL}/assets/${picturePath}`} type="video/mp4" />
                             Your browser does not support the video tag.
-                    </video>):
-                    (<Typography component={Link} color={palette.primary.dark} p={1} my={1} sx={{backgroundColor:palette.neutral.light, borderRadius:'.5em'}}   href={`${process.env.REACT_APP_HOSTURL}/assets/${picturePath}`}>
+                    </video>): (
+                    <Typography component={Link} color={palette.primary.dark} p={1} my={1} sx={{backgroundColor:palette.neutral.light, borderRadius:'.5em'}}   href={`${process.env.REACT_APP_HOSTURL}/assets/${picturePath}`}>
                         {picturePath}
-                    </Typography>)
-                }</>)}
+                    </Typography>))
+                }
+            </>)}
             {edit &&
                 <Stack spacing={2}>
                     <InputBase
